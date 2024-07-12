@@ -8,7 +8,7 @@ public sealed class OperationServiceExtensionsTests
     [Fact( DisplayName = "AddOperationHandler: adds descriptors for handler" )]
     public void AddOperationHandler_Adds_DescriptorsForHandler( )
     {
-        var services = new ServiceCollection()
+        using var services = new ServiceCollection()
             .AddOperationHandler<TestHandler>()
             .BuildServiceProvider();
 
@@ -22,7 +22,7 @@ public sealed class OperationServiceExtensionsTests
     [Fact( DisplayName = "AddOperationHandler: adds invoker" )]
     public void AddOperationHandler_Adds_OperationInvoker( )
     {
-        var services = new ServiceCollection()
+        using var services = new ServiceCollection()
             .AddOperationHandler<TestHandler>()
             .BuildServiceProvider();
 

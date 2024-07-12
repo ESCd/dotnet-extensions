@@ -9,8 +9,7 @@ public sealed class OperationInvokerTests
     public async Task Invoke_InvokesOperation( )
     {
         var handler = new Handler();
-
-        var services = new ServiceCollection()
+        using var services = new ServiceCollection()
             .AddOperationHandler( handler )
             .BuildServiceProvider();
 
@@ -20,24 +19,25 @@ public sealed class OperationInvokerTests
         Assert.True( handler.WasInvoked );
     }
 
-    [Fact( DisplayName = "Invoke: returns result of invoking handler" )]
-    public async Task Invoke_Returns_ResultOfInvokingHandler( )
+    [Fact( DisplayName = "Invoke (typed result): invokes operation" )]
+    public async Task Invoke_TypedResult_InvokesOperation( )
     {
-        var services = new ServiceCollection()
-            .AddOperationHandler<HandlerThatReturns>()
+        var handler = new HandlerThatReturns();
+        using var services = new ServiceCollection()
+            .AddOperationHandler( handler )
             .BuildServiceProvider();
 
         var invoker = services.GetRequiredService<IOperationInvoker>();
 
-        Assert.Equal(
-            "Hello, World!",
-            await invoker.Invoke( new TestOperationWithResult() ) );
+        var result = await invoker.Invoke( new TestOperationWithResult() );
+        Assert.True( handler.WasInvoked );
+        Assert.Equal( "Hello, World!", result );
     }
 
     [Fact( DisplayName = "Invoke: throws inner exception of target invocation" )]
     public async Task Invoke_Throws_InvocationInnerException( )
     {
-        var services = new ServiceCollection()
+        using var services = new ServiceCollection()
             .AddOperationHandler<HandlerThatThrows>()
             .BuildServiceProvider();
 
@@ -46,10 +46,22 @@ public sealed class OperationInvokerTests
             ( ) => invoker.Invoke( new TestOperation() ) );
     }
 
+    [Fact( DisplayName = "Invoke (typed result): throws inner exception of target invocation" )]
+    public async Task Invoke_TypedOperation_Throws_InvocationInnerException( )
+    {
+        using var services = new ServiceCollection()
+            .AddOperationHandler<HandlerThatThrows>()
+            .BuildServiceProvider();
+
+        var invoker = services.GetRequiredService<IOperationInvoker>();
+        await Assert.ThrowsAsync<NotImplementedException>(
+            ( ) => invoker.Invoke( new TestOperationWithResult() ) );
+    }
+
     [Fact( DisplayName = "Invoke: throws when operation not registered" )]
     public async Task Invoke_Throws_When_OperationNotRegistered( )
     {
-        var services = new ServiceCollection()
+        using var services = new ServiceCollection()
             .AddOperationInvoker()
             .BuildServiceProvider();
 
@@ -74,11 +86,18 @@ public sealed class OperationInvokerTests
 
     private sealed class HandlerThatReturns : IOperationHandler<TestOperationWithResult, string>
     {
-        public Task<string> Invoke( TestOperationWithResult operation, CancellationToken cancellation ) => Task.FromResult( "Hello, World!" );
+        public bool WasInvoked { get; private set; }
+
+        public Task<string> Invoke( TestOperationWithResult operation, CancellationToken cancellation )
+        {
+            WasInvoked = true;
+            return Task.FromResult( "Hello, World!" );
+        }
     }
 
-    private sealed class HandlerThatThrows : IOperationHandler<TestOperation>
+    private sealed class HandlerThatThrows : IOperationHandler<TestOperation>, IOperationHandler<TestOperationWithResult, string>
     {
         public Task Invoke( TestOperation operation, CancellationToken cancellation ) => throw new NotImplementedException();
+        public Task<string> Invoke( TestOperationWithResult operation, CancellationToken cancellation ) => throw new NotImplementedException();
     }
 }
