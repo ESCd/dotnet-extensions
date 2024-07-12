@@ -6,7 +6,7 @@ namespace ESCd.Extensions.OperationInvoker.Tests;
 public sealed class OperationServiceExtensionsTests
 {
     [Fact( DisplayName = "AddOperationHandler: adds descriptors for handler" )]
-    public async Task AddOperationHandler_Adds_DescriptorsForHandler( )
+    public void AddOperationHandler_Adds_DescriptorsForHandler( )
     {
         var services = new ServiceCollection()
             .AddOperationHandler<TestHandler>()
@@ -20,7 +20,7 @@ public sealed class OperationServiceExtensionsTests
     }
 
     [Fact( DisplayName = "AddOperationHandler: adds invoker" )]
-    public async Task AddOperationHandler_Adds_OperationInvoker( )
+    public void AddOperationHandler_Adds_OperationInvoker( )
     {
         var services = new ServiceCollection()
             .AddOperationHandler<TestHandler>()
@@ -31,7 +31,7 @@ public sealed class OperationServiceExtensionsTests
     }
 
     [Fact( DisplayName = "AddOperationHandler: throws when type does not implement handler" )]
-    public async Task AddOperationHandler_Throws_When_TypeDoesNotImplementHandler( )
+    public void AddOperationHandler_Throws_When_TypeDoesNotImplementHandler( )
     {
         var services = new ServiceCollection();
         Assert.Throws<ArgumentException>(

@@ -1,7 +1,9 @@
 <Project>
 
   <PropertyGroup Condition=" '$(IsTestProject)' == 'true' ">
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
     <MinVerSkip>true</MinVerSkip>
+    <NoWarn>$(NoWarn);CS1591;CA1707;</NoWarn>
   </PropertyGroup>
 
   <ItemGroup Condition=" '$(IsTestProject)' == 'true' ">
