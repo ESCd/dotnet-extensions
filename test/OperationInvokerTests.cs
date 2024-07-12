@@ -5,6 +5,21 @@ namespace ESCd.Extensions.OperationInvoker.Tests;
 
 public sealed class OperationInvokerTests
 {
+    [Fact( DisplayName = "Invoke: invokes operation" )]
+    public async Task Invoke_InvokesOperation( )
+    {
+        var handler = new Handler();
+
+        var services = new ServiceCollection()
+            .AddOperationHandler( handler )
+            .BuildServiceProvider();
+
+        var invoker = services.GetRequiredService<IOperationInvoker>();
+        await invoker.Invoke( new TestOperation() );
+
+        Assert.True( handler.WasInvoked );
+    }
+
     [Fact( DisplayName = "Invoke: returns result of invoking handler" )]
     public async Task Invoke_Returns_ResultOfInvokingHandler( )
     {
@@ -16,7 +31,7 @@ public sealed class OperationInvokerTests
 
         Assert.Equal(
             "Hello, World!",
-            await invoker.Invoke( new TestOperation() ) );
+            await invoker.Invoke( new TestOperationWithResult() ) );
     }
 
     [Fact( DisplayName = "Invoke: throws inner exception of target invocation" )]
@@ -40,17 +55,30 @@ public sealed class OperationInvokerTests
 
         var invoker = services.GetRequiredService<IOperationInvoker>();
         await Assert.ThrowsAsync<ArgumentException>(
-            ( ) => invoker.Invoke( new TestOperation() ) );
+            ( ) => invoker.Invoke( new TestOperationWithResult() ) );
     }
 
-    private sealed record TestOperation : IOperation<string>;
-    private sealed class HandlerThatThrows : IOperationHandler<TestOperation, string>
+    private sealed record TestOperationWithResult : IOperation<string>;
+    private sealed record TestOperation : IOperation;
+
+    private sealed class Handler : IOperationHandler<TestOperation>
     {
-        public Task<string> Invoke( TestOperation operation, CancellationToken cancellation ) => throw new NotImplementedException();
+        public bool WasInvoked { get; private set; }
+
+        public Task Invoke( TestOperation operation, CancellationToken cancellation )
+        {
+            WasInvoked = true;
+            return Task.CompletedTask;
+        }
     }
 
-    private sealed class HandlerThatReturns : IOperationHandler<TestOperation, string>
+    private sealed class HandlerThatReturns : IOperationHandler<TestOperationWithResult, string>
     {
-        public Task<string> Invoke( TestOperation operation, CancellationToken cancellation ) => Task.FromResult( "Hello, World!" );
+        public Task<string> Invoke( TestOperationWithResult operation, CancellationToken cancellation ) => Task.FromResult( "Hello, World!" );
+    }
+
+    private sealed class HandlerThatThrows : IOperationHandler<TestOperation>
+    {
+        public Task Invoke( TestOperation operation, CancellationToken cancellation ) => throw new NotImplementedException();
     }
 }
