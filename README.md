@@ -2,9 +2,9 @@
 
 <div align="center">
 
-![Language](https://img.shields.io/github/languages/top/ESCd/OperationInvoker)
-[![Checks](https://img.shields.io/github/checks-status/ESCd/OperationInvoker/develop)](https://github.com/ESCd/OperationInvoker/actions/workflows/default.yml)
-[![Coverage](https://img.shields.io/codecov/c/github/ESCd/OperationInvoker)](https://app.codecov.io/gh/ESCd/OperationInvoker/)
+![Language](https://img.shields.io/github/languages/top/ESCd/dotnet-extensions)
+[![Checks](https://img.shields.io/github/checks-status/ESCd/dotnet-extensions/develop)](https://github.com/ESCd/dotnet-extensions/actions/workflows/default.yml)
+[![Coverage](https://img.shields.io/codecov/c/github/ESCd/dotnet-extensions)](https://app.codecov.io/gh/ESCd/dotnet-extensions/)
 
 </div>
 
