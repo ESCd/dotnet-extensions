@@ -1,13 +1,6 @@
-<h1 align="center">OperationInvoker</h1>
+# ESCd.Extensions.OperationInvoker
 
-<div align="center">
-
-![Language](https://img.shields.io/github/languages/top/ESCd/OperationInvoker)
-[![Checks](https://img.shields.io/github/checks-status/ESCd/OperationInvoker/develop)](https://github.com/ESCd/OperationInvoker/actions/workflows/default.yml)
-[![Coverage](https://img.shields.io/codecov/c/github/ESCd/OperationInvoker)](https://app.codecov.io/gh/ESCd/OperationInvoker/)
 [![Version](https://img.shields.io/nuget/vpre/ESCd.Extensions.OperationInvoker)](https://www.nuget.org/packages/ESCd.Extensions.OperationInvoker)
-
-</div>
 
 A lightweight CQRS-like service pattern.
 

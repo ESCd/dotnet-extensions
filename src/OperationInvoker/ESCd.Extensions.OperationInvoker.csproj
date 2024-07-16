@@ -4,11 +4,13 @@
     <Description>A lightweight CQRS-like service pattern.</Description>
     <IsAotCompatible>true</IsAotCompatible>
     <PackageProjectUrl>$(PackageProjectUrl)tree/develop/src/OperationInvoker</PackageProjectUrl>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
     <TargetFramework>net8.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
     <InternalsVisibleTo Include="ESCd.Extensions.OperationInvoker.Tests" />
+    <None Include="README.md" Pack="true" PackagePath="\" />
   </ItemGroup>
 
   <ItemGroup>

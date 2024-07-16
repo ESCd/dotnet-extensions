@@ -4,11 +4,13 @@
     <Description>Common extensions and utilities for working with HttpClient.</Description>
     <IsAotCompatible>true</IsAotCompatible>
     <PackageProjectUrl>$(PackageProjectUrl)tree/develop/src/Http</PackageProjectUrl>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
     <TargetFramework>net8.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
     <InternalsVisibleTo Include="ESCd.Extensions.Http.Tests" />
+    <None Include="README.md" Pack="true" PackagePath="\" />
   </ItemGroup>
 
   <ItemGroup>
