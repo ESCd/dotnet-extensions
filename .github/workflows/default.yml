@@ -101,6 +101,8 @@ jobs:
       - name: Publish coverage results
         if: success() || failure()
         uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
 
   pack:
     needs: [build]

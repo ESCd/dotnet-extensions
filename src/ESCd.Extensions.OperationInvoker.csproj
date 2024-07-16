@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <Description>A lightweight CQRS-like service pattern.</Description>
     <IsAotCompatible>true</IsAotCompatible>
     <TargetFramework>net8.0</TargetFramework>
   </PropertyGroup>
