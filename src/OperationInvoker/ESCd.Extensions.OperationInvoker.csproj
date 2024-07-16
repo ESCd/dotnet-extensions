@@ -3,6 +3,7 @@
   <PropertyGroup>
     <Description>A lightweight CQRS-like service pattern.</Description>
     <IsAotCompatible>true</IsAotCompatible>
+    <PackageProjectUrl>$(PackageProjectUrl)tree/develop/src/OperationInvoker</PackageProjectUrl>
     <TargetFramework>net8.0</TargetFramework>
   </PropertyGroup>
 

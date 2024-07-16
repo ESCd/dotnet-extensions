@@ -50,7 +50,7 @@ jobs:
         run: dotnet restore --locked-mode
 
       - name: Run tests
-        run: foreach( $project in Get-ChildItem "ESCd.Extensions.OperationInvoker.Tests.csproj" -Recurse ) { dotnet test "$($project.FullName)" -f net8.0 --no-restore --results-directory TestResults --logger "trx;logFileName=$($project.BaseName).trx" --collect:"XPlat Code Coverage" /p:WarningLevel=0 -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=cobertura DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.DeterministicReport=true }
+        run: foreach( $project in Get-ChildItem "ESCd.Extensions.*.Tests.csproj" -Recurse ) { dotnet test "$($project.FullName)" -f net8.0 --no-restore --results-directory TestResults --logger "trx;logFileName=$($project.BaseName).trx" --collect:"XPlat Code Coverage" /p:WarningLevel=0 -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=cobertura DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.DeterministicReport=true }
         shell: pwsh
 
       - name: Upload artifact 'test-results'
@@ -131,26 +131,26 @@ jobs:
           name: packages
           path: dist
 
-  publish:
-    if: startsWith(github.ref, 'refs/heads/main') || startsWith(github.ref, 'refs/heads/develop')
-    needs: [pack]
+  # publish:
+  #   if: startsWith(github.ref, 'refs/heads/main') || startsWith(github.ref, 'refs/heads/develop')
+  #   needs: [pack]
 
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          sparse-checkout: global.json
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #       with:
+  #         sparse-checkout: global.json
 
-      - name: Setup .NET Core
-        uses: actions/setup-dotnet@v4
-        with:
-          cache: false
-          global-json-file: global.json
+  #     - name: Setup .NET Core
+  #       uses: actions/setup-dotnet@v4
+  #       with:
+  #         cache: false
+  #         global-json-file: global.json
 
-      - name: Download artifact 'packages'
-        uses: actions/download-artifact@v4
-        with:
-          name: packages
+  #     - name: Download artifact 'packages'
+  #       uses: actions/download-artifact@v4
+  #       with:
+  #         name: packages
 
-      - name: Push packages
-        run: dotnet nuget push "*.nupkg" --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
+  #     - name: Push packages
+  #       run: dotnet nuget push "*.nupkg" --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate

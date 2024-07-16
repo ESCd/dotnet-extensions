@@ -5,9 +5,11 @@ public interface IOperationInvoker
 {
     /// <summary> Invoke an operation. </summary>
     /// <param name="operation"> The operation to invoke. </param>
+    /// <param name="cancellation"> A token to trigger cancellation of the operation. </param>
     Task Invoke( IOperation operation, CancellationToken cancellation = default );
 
     /// <summary> Invoke an operation. </summary>
     /// <param name="operation"> The operation to invoke. </param>
+    /// <param name="cancellation"> A token to trigger cancellation of the operation. </param>
     Task<TResult> Invoke<TResult>( IOperation<TResult> operation, CancellationToken cancellation = default );
 }

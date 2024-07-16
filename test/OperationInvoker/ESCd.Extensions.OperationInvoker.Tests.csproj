@@ -10,7 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\src\ESCd.Extensions.OperationInvoker.csproj" />
+    <ProjectReference Include="..\..\src\OperationInvoker\ESCd.Extensions.OperationInvoker.csproj" />
   </ItemGroup>
 
 </Project>

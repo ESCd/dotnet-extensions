@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>Common extensions and utilities for working with HttpClient.</Description>
+    <IsAotCompatible>true</IsAotCompatible>
+    <PackageProjectUrl>$(PackageProjectUrl)tree/develop/src/Http</PackageProjectUrl>
+    <TargetFramework>net8.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="ESCd.Extensions.Http.Tests" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.ObjectPool" Version="8.0.7" />
+    <PackageReference Include="Microsoft.IO.RecyclableMemoryStream" Version="3.0.1" />
+  </ItemGroup>
+
+</Project>

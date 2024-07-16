@@ -409,4 +409,7 @@ dotnet_style_allow_statement_immediately_after_block_experimental = false:sugges
 dotnet_style_allow_multiple_blank_lines_experimental = false:suggestion
 
 dotnet_diagnostic.CA1716.severity = none
+
+# CA1725: Parameter names should match base declaration
+dotnet_diagnostic.CA1725.severity = none
 dotnet_diagnostic.IDE0046.severity = none

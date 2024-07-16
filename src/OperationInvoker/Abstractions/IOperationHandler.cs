@@ -10,6 +10,7 @@ public interface IOperationHandler<TOperation>
 {
     /// <summary> Invokes an operation. </summary>
     /// <param name="operation"> The operation being invoked. </param>
+    /// <param name="cancellation"> A token to trigger cancellation of the operation. </param>
     Task Invoke( TOperation operation, CancellationToken cancellation );
 }
 
@@ -22,5 +23,6 @@ public interface IOperationHandler<TOperation, TResult>
 {
     /// <summary> Invokes an operation. </summary>
     /// <param name="operation"> The operation being invoked. </param>
+    /// <param name="cancellation"> A token to trigger cancellation of the operation. </param>
     Task<TResult> Invoke( TOperation operation, CancellationToken cancellation );
 }

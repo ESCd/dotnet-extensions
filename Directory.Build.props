@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <!-- Create a property to easily reference the root of the `src` folder -->
-    <SourceDirectory>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)'))</SourceDirectory>
+    <ExtDirectory>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)'))</ExtDirectory>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -44,8 +44,8 @@
     <Copyright>$([System.DateTime]::Now.Year) Escape Developers, LLC</Copyright>
     <PackageId>$(AssemblyName)</PackageId>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageProjectUrl>https://github.com/ESCd/OperationInvoker</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/ESCd/OperationInvoker.git</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/ESCd/dotnet-extensions/</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/ESCd/dotnet-extensions.git</RepositoryUrl>
     <Title>$(AssemblyName)</Title>
   </PropertyGroup>
 
