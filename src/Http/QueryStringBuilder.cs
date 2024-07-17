@@ -1,21 +1,22 @@
 using System.Globalization;
 using System.Text;
-using Microsoft.Extensions.ObjectPool;
 
 namespace ESCd.Extensions.Http;
 
 /// <summary> Provides a "fluent builder" syntax for constructing query string parameters. </summary>
 /// <remarks> This class cannot be inherited. </remarks>
-public sealed class QueryStringBuilder
+/// <param name="capacity"> The suggested starting size of the instance. </param>
+public sealed class QueryStringBuilder( int capacity )
 {
-    private readonly StringBuilder builder;
+    private readonly StringBuilder builder = new( "?", Math.Max( 1, capacity ) );
 
-    /// <summary> An <see cref="ObjectPool{T}"/> of <see cref="QueryStringBuilder"/>s. </summary>
-    public static readonly ObjectPool<QueryStringBuilder> Pool = ObjectPool.Create( new QueryStringBuilderPooledObjectPolicy() );
+    /// <summary> Get or set the suggested size of the instance. </summary>
+    public int Capacity { get => builder.Capacity; set => builder.Capacity = value; }
 
     /// <summary> Create an empty query string. </summary>
-    public QueryStringBuilder( )
-        => builder = new( "?" );
+    public QueryStringBuilder( ) : this( default )
+    {
+    }
 
     /// <summary> Appends a parameter with the given <paramref name="name"/> and <paramref name="value"/>. </summary>
     /// <param name="name"> The name of the parameter. </param>
