@@ -6,4 +6,4 @@ Common extensions and utilities for working with HttpClient.
 
 ## Commonly Used Types
 
-- [`QueryStringBuilder`](https://github.com/ESCd/dotnet-extensions/tree/develop/src/Http/QueryStringBuilder): Provides a "fluent builder" syntax for creating query strings
+- [`QueryStringBuilder`](https://github.com/ESCd/dotnet-extensions/tree/develop/src/Http/QueryStringBuilder.cs): Provides a "fluent builder" syntax for creating query strings
