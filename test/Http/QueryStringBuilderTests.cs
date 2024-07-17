@@ -25,6 +25,16 @@ public sealed class QueryStringBuilerTests
         Assert.Empty( value );
     }
 
+    [Fact( DisplayName = "Clear: resets builder to empty" )]
+    public void Clear_ResetsBuilderToEmpty( )
+    {
+        var builder = new QueryStringBuilder()
+            .Append( "test", "Hello, World!" )
+            .Clear();
+
+        Assert.Empty( builder.ToString() );
+    }
+
     [Fact( DisplayName = "ToString: contains leading question mark" )]
     public void ToString_Contains_LeadingQuestionMark( )
     {
@@ -51,8 +61,8 @@ public sealed class QueryStringBuilerTests
     {
         var value = "Hello, World!";
         var builder = new QueryStringBuilder()
-            .Append( "test", value );
+            .Append( "test", [ value, "test" ] );
 
-        Assert.Equal( $"?test={Uri.EscapeDataString( value )}", builder.ToString() );
+        Assert.Equal( $"?test={Uri.EscapeDataString( value )}&test=test", builder.ToString() );
     }
 }
