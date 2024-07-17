@@ -124,7 +124,7 @@ public static class QueryStringBuilderExtensions
 
         if( value.HasValue )
         {
-            return builder.Append( name, value.Value.ToString( CultureInfo.InvariantCulture ) );
+            return builder.Append( name, value.Value.ToString( CultureInfo.InvariantCulture ).ToLowerInvariant() );
         }
 
         return builder;
@@ -135,7 +135,7 @@ public static class QueryStringBuilderExtensions
     /// <param name="name"> The name of the parameter. </param>
     /// <param name="value"> The value of the parameter. </param>
     /// <returns> The mutated query string. </returns>
-    public static QueryStringBuilder Append( this QueryStringBuilder builder, string name, long? value )
+    public static QueryStringBuilder Append( this QueryStringBuilder builder, string name, int? value )
     {
         ArgumentNullException.ThrowIfNull( builder );
         ArgumentException.ThrowIfNullOrWhiteSpace( name );
@@ -153,7 +153,7 @@ public static class QueryStringBuilderExtensions
     /// <param name="name"> The name of the parameter. </param>
     /// <param name="value"> The value of the parameter. </param>
     /// <returns> The mutated query string. </returns>
-    public static QueryStringBuilder Append( this QueryStringBuilder builder, string name, int? value )
+    public static QueryStringBuilder Append( this QueryStringBuilder builder, string name, long? value )
     {
         ArgumentNullException.ThrowIfNull( builder );
         ArgumentException.ThrowIfNullOrWhiteSpace( name );
