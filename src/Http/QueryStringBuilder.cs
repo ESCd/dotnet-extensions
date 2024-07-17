@@ -5,17 +5,44 @@ namespace ESCd.Extensions.Http;
 
 /// <summary> Provides a "fluent builder" syntax for constructing query string parameters. </summary>
 /// <remarks> This class cannot be inherited. </remarks>
-/// <param name="capacity"> The suggested starting size of the instance. </param>
-public sealed class QueryStringBuilder( int capacity )
+public sealed class QueryStringBuilder
 {
-    private readonly StringBuilder builder = new( "?", Math.Max( 1, capacity ) );
+    private readonly StringBuilder builder;
 
     /// <summary> Get or set the suggested size of the instance. </summary>
     public int Capacity { get => builder.Capacity; set => builder.Capacity = value; }
 
     /// <summary> Create an empty query string. </summary>
-    public QueryStringBuilder( ) : this( default )
+    public QueryStringBuilder( )
     {
+        builder = new( "?" );
+    }
+
+    /// <summary> Create an empty query string. </summary>
+    /// <param name="capacity"> The suggested starting size of the instance. </param>
+    public QueryStringBuilder( int capacity )
+    {
+        ArgumentOutOfRangeException.ThrowIfNegativeOrZero( capacity );
+        builder = new( "?", Math.Max( 1, capacity ) );
+    }
+
+    /// <summary> Create a query string from the given <paramref name="url"/>. </summary>
+    public QueryStringBuilder( Uri url )
+    {
+        ArgumentNullException.ThrowIfNull( url );
+        builder = new( url.Query ?? "?" );
+    }
+
+    /// <summary> Create a query string from the given <paramref name="value"/>. </summary>
+    public QueryStringBuilder( string value )
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace( value );
+        if( !value.StartsWith( '?' ) )
+        {
+            throw new ArgumentException( "A QueryString must start with a leading '?'.", nameof( value ) );
+        }
+
+        builder = new( value );
     }
 
     /// <summary> Appends a parameter with the given <paramref name="name"/> and <paramref name="value"/>. </summary>
