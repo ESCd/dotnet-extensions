@@ -25,6 +25,13 @@ public sealed class QueryStringBuilerTests
         Assert.Empty( value );
     }
 
+    [Fact( DisplayName = "Builder: uses given Uri's query string" )]
+    public void Builder_Uses_UriQueryString( )
+    {
+        var query = new QueryStringBuilder( new Uri( "https://example.net?test=true" ) );
+        Assert.Equal( "?test=true", query.ToString() );
+    }
+
     [Fact( DisplayName = "Clear: resets builder to empty" )]
     public void Clear_ResetsBuilderToEmpty( )
     {

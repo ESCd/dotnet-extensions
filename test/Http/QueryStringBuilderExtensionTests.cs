@@ -1,3 +1,5 @@
+using System.Globalization;
+
 namespace ESCd.Extensions.Http.Tests;
 
 public sealed class QueryStringBuilerExtensionTests
@@ -57,6 +59,25 @@ public sealed class QueryStringBuilerExtensionTests
 
         Assert.Empty( builder.ToString() );
     }
+
+    [Fact( DisplayName = "Append (double): appends double string" )]
+    public void Append_Double_AppendsDoubleString( )
+    {
+        var builder = new QueryStringBuilder()
+            .Append( "test", double.MaxValue );
+
+        Assert.Equal( $"?test={Uri.EscapeDataString( double.MaxValue.ToString( CultureInfo.InvariantCulture ) )}", builder.ToString() );
+    }
+
+    [Fact( DisplayName = "Append (double?): does not append null" )]
+    public void Append_Double_DoesNot_AppendNull( )
+    {
+        var builder = new QueryStringBuilder()
+            .Append( "test", default( double? ) );
+
+        Assert.Empty( builder.ToString() );
+    }
+
 
     [Fact( DisplayName = "Append (int): appends int string" )]
     public void Append_Int_AppendsIntString( )

@@ -32,10 +32,10 @@ public static class ObjectPoolProviderExtensions
 public sealed class PooledQueryStringBuilderPolicy : PooledObjectPolicy<QueryStringBuilder>
 {
     /// <summary> The initial capacity of pooled instances. </summary>
-    public int InitialCapacity { get; set; } = 256;
+    public int InitialCapacity { get; set; } = sizeof( char ) * 128;
 
     /// <summary> The maximum capacity of pooled instances. </summary>
-    public int MaximumRetainedCapacity { get; set; } = 4096;
+    public int MaximumRetainedCapacity { get; set; } = sizeof( char ) * 2048;
 
     /// <inheritdoc/>
     public override QueryStringBuilder Create( ) => new( InitialCapacity );
