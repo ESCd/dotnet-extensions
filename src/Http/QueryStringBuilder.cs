@@ -29,22 +29,15 @@ public sealed class QueryStringBuilder
     }
 
     /// <summary> Create a query string from the given <paramref name="url"/>. </summary>
-    public QueryStringBuilder( Uri url )
+    public QueryStringBuilder( Uri? url ) : this( url?.Query )
     {
-        ArgumentNullException.ThrowIfNull( url );
-        builder = new( url.Query ?? "?" );
     }
 
     /// <summary> Create a query string from the given <paramref name="value"/>. </summary>
-    public QueryStringBuilder( string value )
+    public QueryStringBuilder( string? value )
     {
-        ArgumentException.ThrowIfNullOrWhiteSpace( value );
-        if( !value.StartsWith( '?' ) )
-        {
-            throw new ArgumentException( "A QueryString must start with a leading '?'.", nameof( value ) );
-        }
-
-        builder = new( value );
+        builder = new(
+            !string.IsNullOrWhiteSpace( value ) ? $"?{value?.Trim( '?', '&' )}&" : "?" );
     }
 
     /// <summary> Appends a parameter with the given <paramref name="name"/> and <paramref name="value"/>. </summary>
