@@ -60,6 +60,24 @@ public sealed class QueryStringBuilerExtensionTests
         Assert.Empty( builder.ToString() );
     }
 
+    [Fact( DisplayName = "Append (decimal): appends double string" )]
+    public void Append_Decimal_AppendsDecimalString( )
+    {
+        var builder = new QueryStringBuilder()
+            .Append( "test", decimal.MaxValue );
+
+        Assert.Equal( $"?test={Uri.EscapeDataString( decimal.MaxValue.ToString( CultureInfo.InvariantCulture ) )}", builder.ToString() );
+    }
+
+    [Fact( DisplayName = "Append (decimal?): does not append null" )]
+    public void Append_Decimal_DoesNot_AppendNull( )
+    {
+        var builder = new QueryStringBuilder()
+            .Append( "test", default( decimal? ) );
+
+        Assert.Empty( builder.ToString() );
+    }
+
     [Fact( DisplayName = "Append (double): appends double string" )]
     public void Append_Double_AppendsDoubleString( )
     {
@@ -77,7 +95,6 @@ public sealed class QueryStringBuilerExtensionTests
 
         Assert.Empty( builder.ToString() );
     }
-
 
     [Fact( DisplayName = "Append (int): appends int string" )]
     public void Append_Int_AppendsIntString( )
