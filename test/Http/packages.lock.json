@@ -164,8 +164,8 @@
       },
       "Microsoft.Extensions.ObjectPool": {
         "type": "Transitive",
-        "resolved": "8.0.7",
-        "contentHash": "2yLweyqmpuuFSRo+I3sLHMxmnAgNcI537kBJiyv49U2ZEqo00jZcG8lrnD8uCiOJp9IklYyTZULtbsXoFVzsjQ=="
+        "resolved": "8.0.8",
+        "contentHash": "wnjTFjEvvSbOs3iMfl6CeJcUgPHZMYUB9uAQbGQGxGwVRl4GydNpMSkVntTzoi7AqQeYumU9yDSNeVbpq+ebow=="
       },
       "Microsoft.Extensions.Options": {
         "type": "Transitive",
@@ -300,7 +300,7 @@
         "type": "Project",
         "dependencies": {
           "Microsoft.Extensions.Http": "[8.0.0, )",
-          "Microsoft.Extensions.ObjectPool": "[8.0.7, )",
+          "Microsoft.Extensions.ObjectPool": "[8.0.8, )",
           "Microsoft.IO.RecyclableMemoryStream": "[3.0.1, )",
           "System.Net.Http.Json": "[8.0.0, )",
           "System.Text.Json": "[8.0.4, )"
