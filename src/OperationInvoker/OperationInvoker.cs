@@ -21,7 +21,7 @@ internal sealed class OperationInvoker( HandlerDescriptorFinder descriptorFinder
         catch( TargetInvocationException exception )
         {
             // NOTE: rethrow the exception of the target invocation
-            throw exception.InnerException!;
+            throw exception.InnerException ?? exception;
         }
     }
 
@@ -39,7 +39,7 @@ internal sealed class OperationInvoker( HandlerDescriptorFinder descriptorFinder
         catch( TargetInvocationException exception )
         {
             // NOTE: rethrow the exception of the target invocation
-            throw exception.InnerException!;
+            throw exception.InnerException ?? exception;
         }
     }
 
