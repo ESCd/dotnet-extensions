@@ -15,7 +15,7 @@ public static class HttpServiceExtensions
 
         services.TryAddSingleton<ObjectPoolProvider, DefaultObjectPoolProvider>();
         services.TryAddSingleton(
-            serviceProvider => serviceProvider.GetRequiredService<ObjectPoolProvider>()
+            static serviceProvider => serviceProvider.GetRequiredService<ObjectPoolProvider>()
                 .CreateQueryStringBuilderPool() );
 
         return services;
