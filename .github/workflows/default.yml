@@ -54,98 +54,53 @@ jobs:
         run: dotnet restore --locked-mode
 
       - name: Run tests (net8.0)
-        run: foreach( $project in Get-ChildItem "ESCd.Extensions.*.Tests.csproj" -Recurse ) { dotnet test "$($project.FullName)" -f net8.0 --no-restore --results-directory TestResultsNet80 --logger "trx;logFileName=$($project.BaseName).trx" --collect:"XPlat Code Coverage" /p:WarningLevel=0 -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=cobertura DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.DeterministicReport=true }
+        run: foreach( $project in Get-ChildItem "ESCd.Extensions.*.Tests.csproj" -Recurse ) { dotnet test "$($project.FullName)" -f net8.0 --no-restore --results-directory TestResults/net8.0 --logger "trx;logFileName=$($project.BaseName).trx" --collect:"XPlat Code Coverage" /p:WarningLevel=0 -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=cobertura DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.DeterministicReport=true }
         shell: pwsh
-
-      - name: Upload artifact 'test-results-net80'
-        uses: actions/upload-artifact@v4
-        if: success() || failure()
-        with:
-          name: test-results-net80
-          path: TestResultsNet80
-
-      - name: Report test results (net8.0)
-        uses: dorny/test-reporter@v1
-        if: success() || failure()
-        with:
-          name: test results (net8.0)
-          path: TestResultsNet80/**/*.trx
-          reporter: dotnet-trx
-
-      - name: Generate coverage results (net8.0)
-        uses: danielpalme/ReportGenerator-GitHub-Action@5
-        with:
-          reports: TestResultsNet80/**/coverage.cobertura.xml
-          reporttypes: "Cobertura;MarkdownSummary"
-          targetdir: CoverageResultsNet80
-          title: coverage results (net8.0)
-
-      - name: Upload artifact 'coverage-results-net80'
-        uses: actions/upload-artifact@v4
-        if: success() || failure()
-        with:
-          name: coverage-results-net80
-          path: CoverageResultsNet80
-
-      - name: Report coverage results (net8.0)
-        uses: cryptoc1/cobertura-action@master
-        if: success() || failure()
-        with:
-          fail_below_threshold: false
-          link_missing_lines: true
-          minimum_coverage: 80
-          path: CoverageResultsNet80/Cobertura.xml
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          report_name: coverage results (net8.0)
-          show_branch: false
-          show_class_names: true
-          show_missing: true
-          skip_covered: false
 
       - name: Run tests (net9.0)
-        run: foreach( $project in Get-ChildItem "ESCd.Extensions.*.Tests.csproj" -Recurse ) { dotnet test "$($project.FullName)" -f net9.0 --no-restore --results-directory TestResultsNet90 --logger "trx;logFileName=$($project.BaseName).trx" --collect:"XPlat Code Coverage" /p:WarningLevel=0 -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=cobertura DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.DeterministicReport=true }
+        run: foreach( $project in Get-ChildItem "ESCd.Extensions.*.Tests.csproj" -Recurse ) { dotnet test "$($project.FullName)" -f net9.0 --no-restore --results-directory TestResults/net9.0 --logger "trx;logFileName=$($project.BaseName).trx" --collect:"XPlat Code Coverage" /p:WarningLevel=0 -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=cobertura DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.DeterministicReport=true }
         shell: pwsh
 
-      - name: Upload artifact 'test-results-net90'
+      - name: Upload artifact 'test-results'
         uses: actions/upload-artifact@v4
         if: success() || failure()
         with:
-          name: test-results-net90
-          path: TestResultsNet90
+          name: test-results
+          path: TestResults
 
-      - name: Report test results (net9.0)
+      - name: Report test results
         uses: dorny/test-reporter@v1
         if: success() || failure()
         with:
-          name: test results (net9.0)
-          path: TestResultsNet90/**/*.trx
+          name: test results
+          path: TestResults/**/*.trx
           reporter: dotnet-trx
 
-      - name: Generate coverage results (net9.0)
+      - name: Generate coverage results
         uses: danielpalme/ReportGenerator-GitHub-Action@5
         with:
-          reports: TestResultsNet90/**/coverage.cobertura.xml
+          reports: TestResults/**/coverage.cobertura.xml
           reporttypes: "Cobertura;MarkdownSummary"
-          targetdir: CoverageResultsNet90
-          title: coverage results (net9.0)
+          targetdir: CoverageResults
+          title: coverage results
 
-      - name: Upload artifact 'coverage-results-net90'
+      - name: Upload artifact 'coverage-results'
         uses: actions/upload-artifact@v4
         if: success() || failure()
         with:
-          name: coverage-results-net90
-          path: CoverageResultsNet90
+          name: coverage-results
+          path: CoverageResults
 
-      - name: Report coverage results (net9.0)
+      - name: Report coverage results
         uses: cryptoc1/cobertura-action@master
         if: success() || failure()
         with:
           fail_below_threshold: false
           link_missing_lines: true
           minimum_coverage: 80
-          path: CoverageResultsNet90/Cobertura.xml
+          path: CoverageResults/Cobertura.xml
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          report_name: coverage results (net9.0)
+          report_name: coverage results
           show_branch: false
           show_class_names: true
           show_missing: true
