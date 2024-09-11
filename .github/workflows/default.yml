@@ -44,9 +44,11 @@ jobs:
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v4
         with:
-          cache: false
+          cache: true
           cache-dependency-path: ./**/packages.lock.json
-          global-json-file: global.json
+          dotnet-version: |
+            8.0.x
+            9.0.x
 
       - name: Restore dependencies
         run: dotnet restore --locked-mode
@@ -107,7 +109,7 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
 
   pack:
-    needs: [build]
+    needs: [test]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -119,7 +121,9 @@ jobs:
         with:
           cache: true
           cache-dependency-path: ./**/packages.lock.json
-          global-json-file: global.json
+          dotnet-version: |
+            8.0.x
+            9.0.x
 
       - name: Restore dependencies
         run: dotnet restore --locked-mode
@@ -147,7 +151,9 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           cache: false
-          global-json-file: global.json
+          dotnet-version: |
+            8.0.x
+            9.0.x
 
       - name: Download artifact 'packages'
         uses: actions/download-artifact@v4
