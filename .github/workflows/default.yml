@@ -25,6 +25,7 @@ jobs:
         with:
           cache: true
           cache-dependency-path: ./**/packages.lock.json
+          dotnet-quality: preview
           global-json-file: global.json
 
       - name: Restore dependencies
