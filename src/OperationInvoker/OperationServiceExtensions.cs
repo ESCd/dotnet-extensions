@@ -42,7 +42,9 @@ public static class OperationServiceExtensions
 
     private static ServiceDescriptor[] CreateHandlerDescriptors<[DynamicallyAccessedMembers( DynamicallyAccessedMemberTypes.Interfaces | DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.PublicMethods )] THandler>( THandler? instance = null )
         where THandler : class
-        => [ .. typeof( THandler ).GetInterfaces()
+    {
+        var handlerType = typeof( THandler );
+        return [ .. handlerType.GetInterfaces()
             .Where( static type =>
             {
                 if( !type.IsGenericType )
@@ -53,14 +55,19 @@ public static class OperationServiceExtensions
                 var definition = type.GetGenericTypeDefinition();
                 return definition == typeof( IOperationHandler<> ) || definition == typeof( IOperationHandler<,> );
             } )
-            .Select( ( [DynamicallyAccessedMembers( DynamicallyAccessedMemberTypes.PublicMethods )] type ) => new OperationHandlerDescriptor
-            {
-                HandlerType = typeof( THandler ),
-                Instance = instance,
-                InvokeMethod = type.GetMethod( "Invoke", BindingFlags.Instance | BindingFlags.Public ) ?? throw new MissingMethodException( $"Type '{typeof( THandler ).FullName}' is missing method 'Invoke'. This may be the result of code trimming." ),
-                OperationType = type.GenericTypeArguments[ 0 ],
-            } )
+#pragma warning disable IL2111
+            .Select( CreateDescriptor )
+#pragma warning restore IL2111
             .Select( ServiceDescriptor.Singleton ) ];
+
+        OperationHandlerDescriptor CreateDescriptor( [DynamicallyAccessedMembers( DynamicallyAccessedMemberTypes.PublicMethods )] Type type ) => new()
+        {
+            HandlerType = handlerType,
+            Instance = instance,
+            InvokeMethod = type.GetMethod( "Invoke", BindingFlags.Instance | BindingFlags.Public ) ?? throw new MissingMethodException( $"Type '{typeof( THandler ).FullName}' is missing method 'Invoke'. This may be the result of code trimming." ),
+            OperationType = type.GenericTypeArguments[ 0 ],
+        };
+    }
 }
 
 /// <summary> Represents the metadata of an <see cref="IOperationHandler{T}"/> implementation. </summary>

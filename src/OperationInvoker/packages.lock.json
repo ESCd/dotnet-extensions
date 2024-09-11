@@ -4,9 +4,9 @@
     "net8.0": {
       "Microsoft.CodeAnalysis.NetAnalyzers": {
         "type": "Direct",
-        "requested": "[8.0.0, )",
-        "resolved": "8.0.0",
-        "contentHash": "DxiTgkCl3CGq1rYmBX2wjY7XGbxiBdL4J+/AJIAFLKy5z70NxhnVRnPghnicXZ8oF6JKVXlW3xwznRbI3ioEKg=="
+        "requested": "[9.0.0-preview.*, )",
+        "resolved": "9.0.0-preview.24415.1",
+        "contentHash": "wse/MJXzfUMmk1mzPlS0lad96F7NpOb56TAUhfh5lamRooVgzuwoo/RnunGXUpDvKfV2qjZs7atauNo0FiTWOA=="
       },
       "Microsoft.Extensions.DependencyInjection.Abstractions": {
         "type": "Direct",
@@ -19,6 +19,52 @@
         "requested": "[8.0.8, )",
         "resolved": "8.0.8",
         "contentHash": "P8wR6MUWwYXIjPJuBaZgo5zlI/GWI6QEAo6NyVIbPefa9CCkohYu7dP2rD/mrqnjEqfRHyl+h9VZrDoGpELqYg=="
+      },
+      "Microsoft.SourceLink.GitHub": {
+        "type": "Direct",
+        "requested": "[8.0.0, )",
+        "resolved": "8.0.0",
+        "contentHash": "G5q7OqtwIyGTkeIOAc3u2ZuV/kicQaec5EaRnc0pIeSnh9LUjj+PYQrJYBURvDt7twGl2PKA7nSN0kz1Zw5bnQ==",
+        "dependencies": {
+          "Microsoft.Build.Tasks.Git": "8.0.0",
+          "Microsoft.SourceLink.Common": "8.0.0"
+        }
+      },
+      "MinVer": {
+        "type": "Direct",
+        "requested": "[6.0.0, )",
+        "resolved": "6.0.0",
+        "contentHash": "+/SsmiySsXJlvQLCGBqaZKNVt3s/Y/HbAdwtop7Km2CnuZbaScoqkWJEBQ5Cy9ebkn6kCYKrHsXgwrFdTgcb3g=="
+      },
+      "Microsoft.Build.Tasks.Git": {
+        "type": "Transitive",
+        "resolved": "8.0.0",
+        "contentHash": "bZKfSIKJRXLTuSzLudMFte/8CempWjVamNUR5eHJizsy+iuOuO/k2gnh7W0dHJmYY0tBf+gUErfluCv5mySAOQ=="
+      },
+      "Microsoft.SourceLink.Common": {
+        "type": "Transitive",
+        "resolved": "8.0.0",
+        "contentHash": "dk9JPxTCIevS75HyEQ0E4OVAFhB2N+V9ShCXf8Q6FkUQZDkgLI12y679Nym1YqsiSysuQskT7Z+6nUf3yab6Vw=="
+      }
+    },
+    "net9.0": {
+      "Microsoft.CodeAnalysis.NetAnalyzers": {
+        "type": "Direct",
+        "requested": "[9.0.0-preview.*, )",
+        "resolved": "9.0.0-preview.24415.1",
+        "contentHash": "wse/MJXzfUMmk1mzPlS0lad96F7NpOb56TAUhfh5lamRooVgzuwoo/RnunGXUpDvKfV2qjZs7atauNo0FiTWOA=="
+      },
+      "Microsoft.Extensions.DependencyInjection.Abstractions": {
+        "type": "Direct",
+        "requested": "[9.0.0-rc.*, )",
+        "resolved": "9.0.0-rc.1.24431.7",
+        "contentHash": "/Gtbv7/vlcUUx8rsVwI3zMS2gUMewMU2ukUa1mh00lRwBBmPPnempruehrhq/3LHLE4LO8tEaFtTYi1Z33PCWQ=="
+      },
+      "Microsoft.NET.ILLink.Tasks": {
+        "type": "Direct",
+        "requested": "[9.0.0-rc.1.24431.7, )",
+        "resolved": "9.0.0-rc.1.24431.7",
+        "contentHash": "B8jHIIszeUdDY+O4G1/xPOuhrriwsv9Z8/u3XSOAqc8Z0mQCeLBKg2oLGElDZeRF8wWXDGklAKY3f0IHopyXkQ=="
       },
       "Microsoft.SourceLink.GitHub": {
         "type": "Direct",
