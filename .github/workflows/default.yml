@@ -54,7 +54,7 @@ jobs:
         run: dotnet restore --locked-mode
 
       - name: Run tests
-        run: foreach( $project in Get-ChildItem "ESCd.Extensions.*.Tests.csproj" -Recurse ) { dotnet test "$($project.FullName)" -f net8.0 --no-restore --results-directory TestResults --logger "trx;logFileName=$($project.BaseName).trx" --collect:"XPlat Code Coverage" /p:WarningLevel=0 -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=cobertura DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.DeterministicReport=true }
+        run: foreach( $project in Get-ChildItem "ESCd.Extensions.*.Tests.csproj" -Recurse ) { dotnet test "$($project.FullName)" --no-restore --results-directory TestResults --logger "trx;logFileName=$($project.BaseName).trx" --collect:"XPlat Code Coverage" /p:WarningLevel=0 -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=cobertura DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.DeterministicReport=true }
         shell: pwsh
 
       - name: Upload artifact 'test-results'
