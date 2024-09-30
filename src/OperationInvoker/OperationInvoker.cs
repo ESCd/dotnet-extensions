@@ -5,7 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace ESCd.Extensions.OperationInvoker;
 
-internal sealed class OperationInvoker( HandlerDescriptorFinder descriptorFinder, IServiceProvider serviceProvider ) : IOperationInvoker
+internal sealed class OperationInvoker( HandlerDescriptorResolver descriptorResolver, IServiceProvider serviceProvider ) : IOperationInvoker
 {
     public async Task Invoke( IOperation operation, CancellationToken cancellation )
     {
@@ -45,24 +45,9 @@ internal sealed class OperationInvoker( HandlerDescriptorFinder descriptorFinder
 
     private (OperationHandlerDescriptor Descriptor, object Handler) ResolveHandler( Type type )
     {
-        var descriptor = descriptorFinder.Find( type ) ?? throw new ArgumentException( $"An IOperationHandler for {type} has not been registered to the service provider.", nameof( type ) );
+        var descriptor = descriptorResolver.Resolve( type ) ?? throw new ArgumentException( $"An IOperationHandler for {type} has not been registered to the service provider.", nameof( type ) );
         return (
             descriptor,
             descriptor.Instance ?? ActivatorUtilities.CreateInstance( serviceProvider, descriptor.HandlerType ));
     }
 };
-
-internal sealed class HandlerDescriptorFinder( IEnumerable<OperationHandlerDescriptor> descriptors )
-{
-    private readonly Dictionary<Type, OperationHandlerDescriptor> descriptorsByOperationType = descriptors.ToDictionary( handler => handler.OperationType );
-
-    public OperationHandlerDescriptor? Find( Type operationType )
-    {
-        if( descriptorsByOperationType.TryGetValue( operationType, out var descriptor ) )
-        {
-            return descriptor;
-        }
-
-        return default;
-    }
-}

@@ -35,7 +35,7 @@ public static class OperationServiceExtensions
     {
         ArgumentNullException.ThrowIfNull( services );
 
-        services.TryAddSingleton<HandlerDescriptorFinder>();
+        services.TryAddSingleton<HandlerDescriptorResolver>();
         services.TryAddTransient<IOperationInvoker, OperationInvoker>();
         return services;
     }
