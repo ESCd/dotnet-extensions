@@ -27,7 +27,6 @@
     <RunAnalyzers>true</RunAnalyzers>
     <RunCodeAnalysis>false</RunCodeAnalysis>
     <AnalysisLevel>latest-recommended</AnalysisLevel>
-    <_SkipUpgradeNetAnalyzersNuGetWarning>true</_SkipUpgradeNetAnalyzersNuGetWarning>
   </PropertyGroup>
 
   <!-- Git Versioning + Metadata -->
