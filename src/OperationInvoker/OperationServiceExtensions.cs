@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using ESCd.Extensions.OperationInvoker.Abstractions;
@@ -71,6 +72,7 @@ public static class OperationServiceExtensions
 }
 
 /// <summary> Represents the metadata of an <see cref="IOperationHandler{T}"/> implementation. </summary>
+[ImmutableObject( true )]
 public sealed class OperationHandlerDescriptor
 {
     /// <summary> The type of the handler implementation. </summary>
