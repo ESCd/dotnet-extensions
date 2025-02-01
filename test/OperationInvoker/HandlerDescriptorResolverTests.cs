@@ -13,8 +13,8 @@ public sealed class HandlerDescriptorResolverTests
             .AddOperationHandler<OtherTestHandler>()
             .BuildServiceProvider();
 
-        var resolver = services.GetRequiredService<HandlerDescriptorResolver>();
-        var descriptor = resolver.Resolve( typeof( TestOperation ) );
+        var descriptor = services.GetRequiredService<HandlerDescriptorResolver>()
+            .Resolve( typeof( TestOperation ) );
 
         Assert.Equal( typeof( OtherTestHandler ), descriptor?.HandlerType );
     }

@@ -28,7 +28,12 @@ public static class OperationServiceExtensions
             throw new ArgumentException( $"Given type does not implement {typeof( IOperationHandler<> ).Name}.", nameof( THandler ) );
         }
 
-        return AddOperationInvoker( services ).Add( descriptors );
+        return AddOperationInvoker( services ).Add(
+            descriptors.Where( descriptor => !services.Any(
+
+                // NOTE: prevent duplicate registrations
+                service => service.ImplementationInstance is OperationHandlerDescriptor existing && existing == descriptor ) )
+            .Select( ServiceDescriptor.Singleton ) );
     }
 
     /// <summary> Adds the default <see cref="IOperationInvoker"/>. </summary>
@@ -41,7 +46,7 @@ public static class OperationServiceExtensions
         return services;
     }
 
-    private static ServiceDescriptor[] CreateHandlerDescriptors<[DynamicallyAccessedMembers( DynamicallyAccessedMemberTypes.Interfaces | DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.PublicMethods )] THandler>( THandler? instance = null )
+    private static OperationHandlerDescriptor[] CreateHandlerDescriptors<[DynamicallyAccessedMembers( DynamicallyAccessedMemberTypes.Interfaces | DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.PublicMethods )] THandler>( THandler? instance = null )
         where THandler : class
     {
         var handlerType = typeof( THandler );
@@ -57,9 +62,8 @@ public static class OperationServiceExtensions
                 return definition == typeof( IOperationHandler<> ) || definition == typeof( IOperationHandler<,> );
             } )
 #pragma warning disable IL2111
-            .Select( CreateDescriptor )
+            .Select( CreateDescriptor ) ];
 #pragma warning restore IL2111
-            .Select( ServiceDescriptor.Singleton ) ];
 
         OperationHandlerDescriptor CreateDescriptor( [DynamicallyAccessedMembers( DynamicallyAccessedMemberTypes.PublicMethods )] Type type ) => new()
         {
@@ -73,7 +77,7 @@ public static class OperationServiceExtensions
 
 /// <summary> Represents the metadata of an <see cref="IOperationHandler{T}"/> implementation. </summary>
 [ImmutableObject( true )]
-public sealed class OperationHandlerDescriptor
+public sealed record class OperationHandlerDescriptor
 {
     /// <summary> The type of the handler implementation. </summary>
     [DynamicallyAccessedMembers( DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.PublicMethods )]
@@ -82,7 +86,7 @@ public sealed class OperationHandlerDescriptor
     /// <summary> A singleton instance of the handler. </summary>
     public object? Instance { get; internal init; }
 
-    /// <summary> A reference to the <see cref="IOperationHandler{T}.Invoke(T, CancellationToken)"/> method.. </summary>
+    /// <summary> A reference to the <see cref="IOperationHandler{T}.Invoke(T, CancellationToken)"/> method. </summary>
     public MethodInfo InvokeMethod { get; internal init; }
 
     /// <summary> The type of <see cref="IOperation"/> handled by the implementation. </summary>

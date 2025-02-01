@@ -5,16 +5,33 @@ namespace ESCd.Extensions.OperationInvoker.Tests;
 
 public sealed class OperationInvokerTests
 {
+    [Fact( DisplayName = "Invoke: disposes owned handlers" )]
+    public async Task Invoke_Disposes_OwnedHandlers( )
+    {
+        var callback = new HandlerThatDisposes.DisposalCallback();
+
+        using( var services = new ServiceCollection()
+            .AddSingleton( callback )
+            .AddOperationHandler<HandlerThatDisposes>()
+            .BuildServiceProvider() )
+        {
+            await services.GetRequiredService<IOperationInvoker>().Invoke( new TestOperation() );
+        }
+
+        Assert.True( callback );
+    }
+
     [Fact( DisplayName = "Invoke: invokes operation" )]
     public async Task Invoke_InvokesOperation( )
     {
         var handler = new Handler();
-        using var services = new ServiceCollection()
-            .AddOperationHandler( handler )
-            .BuildServiceProvider();
 
-        var invoker = services.GetRequiredService<IOperationInvoker>();
-        await invoker.Invoke( new TestOperation() );
+        using( var services = new ServiceCollection()
+            .AddOperationHandler( handler )
+            .BuildServiceProvider() )
+        {
+            await services.GetRequiredService<IOperationInvoker>().Invoke( new TestOperation() );
+        }
 
         Assert.True( handler.WasInvoked );
     }
@@ -23,15 +40,18 @@ public sealed class OperationInvokerTests
     public async Task Invoke_TypedResult_InvokesOperation( )
     {
         var handler = new HandlerThatReturns();
-        using var services = new ServiceCollection()
+
+        using( var services = new ServiceCollection()
             .AddOperationHandler( handler )
-            .BuildServiceProvider();
+            .BuildServiceProvider() )
+        {
+            var result = await services.GetRequiredService<IOperationInvoker>()
+                .Invoke( new TestOperationWithResult() );
 
-        var invoker = services.GetRequiredService<IOperationInvoker>();
+            Assert.Equal( "Hello, World!", result );
+        }
 
-        var result = await invoker.Invoke( new TestOperationWithResult() );
         Assert.True( handler.WasInvoked );
-        Assert.Equal( "Hello, World!", result );
     }
 
     [Fact( DisplayName = "Invoke: throws inner exception of target invocation" )]
@@ -43,7 +63,7 @@ public sealed class OperationInvokerTests
 
         var invoker = services.GetRequiredService<IOperationInvoker>();
         await Assert.ThrowsAsync<NotImplementedException>(
-            ( ) => invoker.Invoke( new TestOperation() ) );
+            async ( ) => await invoker.Invoke( new TestOperation() ) );
     }
 
     [Fact( DisplayName = "Invoke (typed result): throws inner exception of target invocation" )]
@@ -55,7 +75,7 @@ public sealed class OperationInvokerTests
 
         var invoker = services.GetRequiredService<IOperationInvoker>();
         await Assert.ThrowsAsync<NotImplementedException>(
-            ( ) => invoker.Invoke( new TestOperationWithResult() ) );
+            async ( ) => await invoker.Invoke( new TestOperationWithResult() ) );
     }
 
     [Fact( DisplayName = "Invoke: throws when operation not registered" )]
@@ -67,7 +87,7 @@ public sealed class OperationInvokerTests
 
         var invoker = services.GetRequiredService<IOperationInvoker>();
         await Assert.ThrowsAsync<ArgumentException>(
-            ( ) => invoker.Invoke( new TestOperationWithResult() ) );
+            async ( ) => await invoker.Invoke( new TestOperationWithResult() ) );
     }
 
     private sealed record TestOperationWithResult : IOperation<string>;
@@ -81,6 +101,21 @@ public sealed class OperationInvokerTests
         {
             WasInvoked = true;
             return Task.CompletedTask;
+        }
+    }
+
+    private sealed class HandlerThatDisposes( HandlerThatDisposes.DisposalCallback callback ) : IDisposable, IOperationHandler<TestOperation>
+    {
+        public void Dispose( ) => callback.Invoke();
+
+        public Task Invoke( TestOperation operation, CancellationToken cancellation ) => Task.CompletedTask;
+
+        public sealed record class DisposalCallback
+        {
+            private bool invoked;
+            public void Invoke( ) => invoked = true;
+
+            public static implicit operator bool( DisposalCallback callback ) => callback.invoked;
         }
     }
 
