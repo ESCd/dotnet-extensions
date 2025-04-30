@@ -11,7 +11,7 @@ public interface IOperationHandler<TOperation>
     /// <summary> Invokes an operation. </summary>
     /// <param name="operation"> The operation being invoked. </param>
     /// <param name="cancellation"> A token to trigger cancellation of the operation. </param>
-    Task Invoke( TOperation operation, CancellationToken cancellation );
+    public Task Invoke( TOperation operation, CancellationToken cancellation );
 }
 
 /// <summary> Describes a type that handles an operation of type <typeparamref name="TOperation"/>, that returns a result of type <typeparamref name="TResult"/>. </summary>
@@ -24,5 +24,5 @@ public interface IOperationHandler<TOperation, TResult>
     /// <summary> Invokes an operation. </summary>
     /// <param name="operation"> The operation being invoked. </param>
     /// <param name="cancellation"> A token to trigger cancellation of the operation. </param>
-    Task<TResult> Invoke( TOperation operation, CancellationToken cancellation );
+    public Task<TResult> Invoke( TOperation operation, CancellationToken cancellation );
 }

@@ -18,7 +18,7 @@ public static class WeatherOperation
 ```csharp
 internal sealed class GetForecastHandler : IOperationHandler<WeatherOperation.GetForecast, WeatherForecast[]>
 {
-    public async Task<WeatherForecast[]> Invoke( WeatherOperation.GetForecast operation, CancellationToken cancellation )
+    public async ValueTask<WeatherForecast[]> Invoke( WeatherOperation.GetForecast operation, CancellationToken cancellation )
     {
         ArgumentNullException.ThrowIfNull( operation );
 

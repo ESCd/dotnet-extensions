@@ -9,11 +9,13 @@ public sealed class ServiceProviderExtensionsTests
     public async Task InvokeOperation_InvokesOperation( )
     {
         var handler = new Handler();
-        using var services = new ServiceCollection()
+        using( var services = new ServiceCollection()
             .AddOperationHandler( handler )
-            .BuildServiceProvider();
+            .BuildServiceProvider() )
+        {
+            await services.InvokeOperation( new TestOperation() );
+        }
 
-        await services.InvokeOperation( new TestOperation() );
         Assert.True( handler.WasInvoked );
     }
 
@@ -21,13 +23,15 @@ public sealed class ServiceProviderExtensionsTests
     public async Task InvokeOperation_TypedResult_InvokesOperation( )
     {
         var handler = new HandlerThatReturns();
-        using var services = new ServiceCollection()
+        using( var services = new ServiceCollection()
             .AddOperationHandler( handler )
-            .BuildServiceProvider();
+            .BuildServiceProvider() )
+        {
+            var result = await services.InvokeOperation( new TestOperationWithResult() );
+            Assert.Equal( "Hello, World!", result );
+        }
 
-        var result = await services.InvokeOperation( new TestOperationWithResult() );
         Assert.True( handler.WasInvoked );
-        Assert.Equal( "Hello, World!", result );
     }
 
     private sealed class Handler : IOperationHandler<TestOperation>

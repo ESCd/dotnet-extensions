@@ -59,14 +59,18 @@ public sealed class QueryStringBuilder
     /// <param name="name"> The name of the parameter. </param>
     /// <param name="values"> The values of the parameter. </param>
     /// <returns> The mutated query string. </returns>
-    public QueryStringBuilder Append( string name, IEnumerable<string?> values )
+    public QueryStringBuilder Append( string name, IEnumerable<string?>? values )
     {
         ArgumentException.ThrowIfNullOrWhiteSpace( name );
-        foreach( var value in values )
+
+        if( values is not null )
         {
-            if( !string.IsNullOrWhiteSpace( value ) )
+            foreach( var value in values )
             {
-                builder.Append( CultureInfo.InvariantCulture, $"{name}={Uri.EscapeDataString( value )}&" );
+                if( !string.IsNullOrWhiteSpace( value ) )
+                {
+                    builder.Append( CultureInfo.InvariantCulture, $"{name}={Uri.EscapeDataString( value )}&" );
+                }
             }
         }
 
@@ -97,80 +101,8 @@ public sealed class QueryStringBuilder
 }
 
 /// <summary> Extensions to <see cref="QueryStringBuilder"/> for appending typed values. </summary>
-public static class QueryStringBuilderExtensions
+public static partial class QueryStringBuilderExtensions
 {
-    /// <summary> Appends a parameter with the given <paramref name="name"/> and <paramref name="value"/>. </summary>
-    /// <param name="builder"> The builder to be mutated </param>
-    /// <param name="name"> The name of the parameter. </param>
-    /// <param name="value"> The value of the parameter. </param>
-    /// <returns> The mutated query string. </returns>
-    public static QueryStringBuilder Append( this QueryStringBuilder builder, string name, DateTime? value )
-    {
-        ArgumentNullException.ThrowIfNull( builder );
-        ArgumentException.ThrowIfNullOrWhiteSpace( name );
-
-        if( value.HasValue )
-        {
-            return builder.Append( name, value.Value.ToString( "o", CultureInfo.InvariantCulture ) );
-        }
-
-        return builder;
-    }
-
-    /// <summary> Appends a parameter with the given <paramref name="name"/> and <paramref name="value"/>. </summary>
-    /// <param name="builder"> The builder to be mutated </param>
-    /// <param name="name"> The name of the parameter. </param>
-    /// <param name="value"> The value of the parameter. </param>
-    /// <returns> The mutated query string. </returns>
-    public static QueryStringBuilder Append( this QueryStringBuilder builder, string name, DateTimeOffset? value )
-    {
-        ArgumentNullException.ThrowIfNull( builder );
-        ArgumentException.ThrowIfNullOrWhiteSpace( name );
-
-        if( value.HasValue )
-        {
-            return builder.Append( name, value.Value.ToString( "o", CultureInfo.InvariantCulture ) );
-        }
-
-        return builder;
-    }
-
-    /// <summary> Appends a parameter with the given <paramref name="name"/> and <paramref name="value"/>. </summary>
-    /// <param name="builder"> The builder to be mutated </param>
-    /// <param name="name"> The name of the parameter. </param>
-    /// <param name="value"> The value of the parameter. </param>
-    /// <returns> The mutated query string. </returns>
-    public static QueryStringBuilder Append( this QueryStringBuilder builder, string name, decimal? value )
-    {
-        ArgumentNullException.ThrowIfNull( builder );
-        ArgumentException.ThrowIfNullOrWhiteSpace( name );
-
-        if( value.HasValue )
-        {
-            return builder.Append( name, value.Value.ToString( CultureInfo.InvariantCulture ) );
-        }
-
-        return builder;
-    }
-
-    /// <summary> Appends a parameter with the given <paramref name="name"/> and <paramref name="value"/>. </summary>
-    /// <param name="builder"> The builder to be mutated </param>
-    /// <param name="name"> The name of the parameter. </param>
-    /// <param name="value"> The value of the parameter. </param>
-    /// <returns> The mutated query string. </returns>
-    public static QueryStringBuilder Append( this QueryStringBuilder builder, string name, double? value )
-    {
-        ArgumentNullException.ThrowIfNull( builder );
-        ArgumentException.ThrowIfNullOrWhiteSpace( name );
-
-        if( value.HasValue )
-        {
-            return builder.Append( name, value.Value.ToString( CultureInfo.InvariantCulture ) );
-        }
-
-        return builder;
-    }
-
     /// <summary> Appends a parameter with the given <paramref name="name"/> and <paramref name="value"/>. </summary>
     /// <param name="builder"> The builder to be mutated </param>
     /// <param name="name"> The name of the parameter. </param>
@@ -184,78 +116,6 @@ public static class QueryStringBuilderExtensions
         if( value.HasValue )
         {
             return builder.Append( name, value.Value.ToString( CultureInfo.InvariantCulture ).ToLowerInvariant() );
-        }
-
-        return builder;
-    }
-
-    /// <summary> Appends a parameter with the given <paramref name="name"/> and <paramref name="value"/>. </summary>
-    /// <param name="builder"> The builder to be mutated </param>
-    /// <param name="name"> The name of the parameter. </param>
-    /// <param name="value"> The value of the parameter. </param>
-    /// <returns> The mutated query string. </returns>
-    public static QueryStringBuilder Append( this QueryStringBuilder builder, string name, int? value )
-    {
-        ArgumentNullException.ThrowIfNull( builder );
-        ArgumentException.ThrowIfNullOrWhiteSpace( name );
-
-        if( value.HasValue )
-        {
-            return builder.Append( name, value.Value.ToString( CultureInfo.InvariantCulture ) );
-        }
-
-        return builder;
-    }
-
-    /// <summary> Appends a parameter with the given <paramref name="name"/> and <paramref name="value"/>. </summary>
-    /// <param name="builder"> The builder to be mutated </param>
-    /// <param name="name"> The name of the parameter. </param>
-    /// <param name="value"> The value of the parameter. </param>
-    /// <returns> The mutated query string. </returns>
-    public static QueryStringBuilder Append( this QueryStringBuilder builder, string name, long? value )
-    {
-        ArgumentNullException.ThrowIfNull( builder );
-        ArgumentException.ThrowIfNullOrWhiteSpace( name );
-
-        if( value.HasValue )
-        {
-            return builder.Append( name, value.Value.ToString( CultureInfo.InvariantCulture ) );
-        }
-
-        return builder;
-    }
-
-    /// <summary> Appends a parameter with the given <paramref name="name"/> and <paramref name="value"/>. </summary>
-    /// <param name="builder"> The builder to be mutated </param>
-    /// <param name="name"> The name of the parameter. </param>
-    /// <param name="value"> The value of the parameter. </param>
-    /// <returns> The mutated query string. </returns>
-    public static QueryStringBuilder Append( this QueryStringBuilder builder, string name, uint? value )
-    {
-        ArgumentNullException.ThrowIfNull( builder );
-        ArgumentException.ThrowIfNullOrWhiteSpace( name );
-
-        if( value.HasValue )
-        {
-            return builder.Append( name, value.Value.ToString( CultureInfo.InvariantCulture ) );
-        }
-
-        return builder;
-    }
-
-    /// <summary> Appends a parameter with the given <paramref name="name"/> and <paramref name="value"/>. </summary>
-    /// <param name="builder"> The builder to be mutated </param>
-    /// <param name="name"> The name of the parameter. </param>
-    /// <param name="value"> The value of the parameter. </param>
-    /// <returns> The mutated query string. </returns>
-    public static QueryStringBuilder Append( this QueryStringBuilder builder, string name, ulong? value )
-    {
-        ArgumentNullException.ThrowIfNull( builder );
-        ArgumentException.ThrowIfNullOrWhiteSpace( name );
-
-        if( value.HasValue )
-        {
-            return builder.Append( name, value.Value.ToString( CultureInfo.InvariantCulture ) );
         }
 
         return builder;
