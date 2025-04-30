@@ -12,8 +12,7 @@
   "dotnet.backgroundAnalysis.compilerDiagnosticsScope": "fullSolution",
   "dotnet.codeLens.enableReferencesCodeLens": false,
   "dotnet.codeLens.enableTestsCodeLens": false,
-  "dotnet.defaultSolution": "dotnet-extensions.sln",
-  "dotnet.implementType.propertyGenerationBehavior": "preferAutoProperties",
+  "dotnet.defaultSolution": "dotnet-extensions.slnx",
   "dotnet.navigation.navigateToDecompiledSources": true,
   "explorer.fileNesting.enabled": true,
   "explorer.fileNesting.patterns": {
