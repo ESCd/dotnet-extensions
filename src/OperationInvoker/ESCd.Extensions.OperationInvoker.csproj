@@ -9,6 +9,10 @@
 
   <ItemGroup>
     <InternalsVisibleTo Include="ESCd.Extensions.OperationInvoker.Tests" />
+    <SupportedPlatform Include="browser" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="README.md" Pack="true" PackagePath="\" />
   </ItemGroup>
 
