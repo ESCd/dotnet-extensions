@@ -5,14 +5,11 @@ namespace ESCd.Extensions.OperationInvoker.Benchmarks;
 
 public partial class OperationInvokerBenchmarks : IDisposable
 {
-    private readonly ServiceProvider serviceProvider;
+    private readonly ServiceProvider serviceProvider = new ServiceCollection()
+        .AddOperationHandler<Handler>()
+        .BuildServiceProvider();
 
-    public OperationInvokerBenchmarks( )
-    {
-        serviceProvider = new ServiceCollection()
-            .AddOperationHandler<Handler>()
-            .BuildServiceProvider();
-    }
+    private readonly bool yield = Random.Shared.NextDouble() < .5;
 
     public void Dispose( )
     {
@@ -21,12 +18,20 @@ public partial class OperationInvokerBenchmarks : IDisposable
     }
 
     [Benchmark]
-    public async Task Invoke( ) => await serviceProvider.InvokeOperation( new Operation() );
+    public async Task Invoke( ) => await serviceProvider.InvokeOperation( new Operation( yield ) );
 }
 
-sealed file record Operation : IOperation;
+sealed file record Operation( bool Yield ) : IOperation;
 
 sealed file class Handler : IOperationHandler<Operation>
 {
-    public Task Invoke( Operation operation, CancellationToken cancellation ) => Task.CompletedTask;
+    public async ValueTask Invoke( Operation operation, CancellationToken cancellation )
+    {
+        ArgumentNullException.ThrowIfNull( operation );
+
+        if( operation.Yield )
+        {
+            await Task.Yield();
+        }
+    }
 }

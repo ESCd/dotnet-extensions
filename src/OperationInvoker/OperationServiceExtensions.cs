@@ -1,6 +1,7 @@
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using ESCd.Extensions.OperationInvoker.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -49,29 +50,47 @@ public static class OperationServiceExtensions
     private static OperationHandlerDescriptor[] CreateHandlerDescriptors<[DynamicallyAccessedMembers( DynamicallyAccessedMemberTypes.Interfaces | DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.PublicMethods )] THandler>( THandler? instance = null )
         where THandler : class
     {
-        var handlerType = typeof( THandler );
-        return [ .. handlerType.GetInterfaces()
-            .Where( static type =>
+        var handlerType = typeof( THandler ).GetTypeInfo();
+        return [ .. handlerType.GetInterfaces().Select(type => type.GetTypeInfo()).Where( static type =>
+        {
+            if( !type.IsGenericType )
             {
-                if( !type.IsGenericType )
-                {
-                    return false;
-                }
+                return false;
+            }
 
-                var definition = type.GetGenericTypeDefinition();
-                return definition == typeof( IOperationHandler<> ) || definition == typeof( IOperationHandler<,> );
-            } )
+            var definition = type.GetGenericTypeDefinition();
+            return definition == typeof( IOperationHandler<> ) || definition == typeof( IOperationHandler<,> );
 #pragma warning disable IL2111
-            .Select( CreateDescriptor ) ];
+        } ).Select( CreateDescriptor ) ];
 #pragma warning restore IL2111
 
-        OperationHandlerDescriptor CreateDescriptor( [DynamicallyAccessedMembers( DynamicallyAccessedMemberTypes.PublicMethods )] Type type ) => new()
+        OperationHandlerDescriptor CreateDescriptor( [DynamicallyAccessedMembers( DynamicallyAccessedMemberTypes.PublicMethods )] Type type )
         {
-            HandlerType = handlerType,
-            Instance = instance,
-            InvokeMethod = type.GetMethod( "Invoke", BindingFlags.Instance | BindingFlags.Public ) ?? throw new MissingMethodException( $"Type '{typeof( THandler ).FullName}' is missing method 'Invoke'. This may be the result of code trimming." ),
-            OperationType = type.GenericTypeArguments[ 0 ],
-        };
+            ArgumentNullException.ThrowIfNull( type );
+
+            return new()
+            {
+                HandlerType = handlerType,
+                Instance = instance,
+                Invoke = CreateDelegate( type ),
+                OperationType = type.GenericTypeArguments[ 0 ].GetTypeInfo(),
+            };
+
+            [MethodImpl( MethodImplOptions.AggressiveInlining )]
+            [SuppressMessage( "AOT", "IL3050", Justification = "Referenced types are guaranteed at runtime by the generic type definitions on the underlying HandlerType." )]
+            static Delegate CreateDelegate( [DynamicallyAccessedMembers( DynamicallyAccessedMemberTypes.PublicMethods )] Type type )
+            {
+                ArgumentNullException.ThrowIfNull( type );
+
+                var method = type.GetMethod( "Invoke", BindingFlags.Instance | BindingFlags.Public ) ?? throw new MissingMethodException( $"Type '{typeof( THandler ).FullName}' is missing method 'Invoke'. This may be the result of code trimming." );
+                return method.CreateDelegate(
+                    typeof( Func<,,,> ).MakeGenericType(
+                        type,
+                        type.GenericTypeArguments[ 0 ].GetTypeInfo(),
+                        typeof( CancellationToken ),
+                        method.ReturnType ) );
+            }
+        }
     }
 }
 
@@ -86,8 +105,8 @@ public sealed record class OperationHandlerDescriptor
     /// <summary> A singleton instance of the handler. </summary>
     public object? Instance { get; internal init; }
 
-    /// <summary> A reference to the <see cref="IOperationHandler{T}.Invoke(T, CancellationToken)"/> method. </summary>
-    public MethodInfo InvokeMethod { get; internal init; }
+    /// <summary> A compiled delegate of the <see cref="IOperationHandler{T}.Invoke(T, CancellationToken)"/> method. </summary>
+    public Delegate Invoke { get; internal init; }
 
     /// <summary> The type of <see cref="IOperation"/> handled by the implementation. </summary>
     public Type OperationType { get; internal init; }

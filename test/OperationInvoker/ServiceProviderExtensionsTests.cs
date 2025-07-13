@@ -38,10 +38,10 @@ public sealed class ServiceProviderExtensionsTests
     {
         public bool WasInvoked { get; private set; }
 
-        public Task Invoke( TestOperation operation, CancellationToken cancellation )
+        public ValueTask Invoke( TestOperation operation, CancellationToken cancellation )
         {
             WasInvoked = true;
-            return Task.CompletedTask;
+            return ValueTask.CompletedTask;
         }
     }
 
@@ -49,10 +49,10 @@ public sealed class ServiceProviderExtensionsTests
     {
         public bool WasInvoked { get; private set; }
 
-        public Task<string> Invoke( TestOperationWithResult operation, CancellationToken cancellation )
+        public ValueTask<string> Invoke( TestOperationWithResult operation, CancellationToken cancellation )
         {
             WasInvoked = true;
-            return Task.FromResult( "Hello, World!" );
+            return ValueTask.FromResult( "Hello, World!" );
         }
     }
 

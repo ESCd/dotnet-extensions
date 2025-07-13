@@ -22,11 +22,11 @@ public sealed class HandlerDescriptorResolverTests
     private sealed record TestOperation : IOperation;
     private sealed class TestHandler : IOperationHandler<TestOperation>
     {
-        public Task Invoke( TestOperation operation, CancellationToken cancellation ) => throw new NotImplementedException();
+        public ValueTask Invoke( TestOperation operation, CancellationToken cancellation ) => throw new NotImplementedException();
     }
 
     private sealed class OtherTestHandler : IOperationHandler<TestOperation>
     {
-        public Task Invoke( TestOperation operation, CancellationToken cancellation ) => throw new NotImplementedException();
+        public ValueTask Invoke( TestOperation operation, CancellationToken cancellation ) => throw new NotImplementedException();
     }
 }
