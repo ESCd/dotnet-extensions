@@ -4,6 +4,7 @@
     <Description>A lightweight CQRS-like service pattern.</Description>
     <PackageProjectUrl>$(PackageProjectUrl)tree/develop/src/OperationInvoker</PackageProjectUrl>
     <PackageReadmeFile>README.md</PackageReadmeFile>
+    <MinVerTagPrefix>operations-v</MinVerTagPrefix>
     <TargetFrameworks>net8.0;net9.0;</TargetFrameworks>
   </PropertyGroup>
 

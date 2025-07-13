@@ -7,7 +7,7 @@ namespace ESCd.Extensions.OperationInvoker;
 
 internal sealed class OperationInvoker( HandlerDescriptorResolver descriptorResolver, IServiceProvider serviceProvider ) : IOperationInvoker
 {
-    public async Task Invoke( IOperation operation, CancellationToken cancellation )
+    public async ValueTask Invoke( IOperation operation, CancellationToken cancellation )
     {
         ArgumentNullException.ThrowIfNull( operation );
 
@@ -18,7 +18,7 @@ internal sealed class OperationInvoker( HandlerDescriptorResolver descriptorReso
         await invoker.Invoke( operation, cancellation );
     }
 
-    public async Task<TResult> Invoke<TResult>( IOperation<TResult> operation, CancellationToken cancellation )
+    public async ValueTask<TResult> Invoke<TResult>( IOperation<TResult> operation, CancellationToken cancellation )
     {
         ArgumentNullException.ThrowIfNull( operation );
 
@@ -29,11 +29,8 @@ internal sealed class OperationInvoker( HandlerDescriptorResolver descriptorReso
         return await invoker.Invoke( operation, cancellation );
     }
 
-    private OperationHandlerDescriptor ResolveHandlerDescriptor( Type type )
-    {
-        ArgumentNullException.ThrowIfNull( type );
-        return descriptorResolver.Resolve( type ) ?? throw new ArgumentException( $"An IOperationHandler for {type} has not been registered to the service provider.", nameof( type ) );
-    }
+    [MethodImpl( MethodImplOptions.AggressiveInlining )]
+    private OperationHandlerDescriptor ResolveHandlerDescriptor( Type type ) => descriptorResolver.Resolve( type ) ?? throw new ArgumentException( $"An IOperationHandler for {type} has not been registered to the service provider.", nameof( type ) );
 };
 
 sealed file class OperationHandlerInvoker( OperationHandlerDescriptor descriptor, IServiceProvider serviceProvider ) : IAsyncDisposable
@@ -42,13 +39,14 @@ sealed file class OperationHandlerInvoker( OperationHandlerDescriptor descriptor
 
     public ValueTask DisposeAsync( ) => instance.DisposeAsync();
 
-    public Task Invoke( IOperation operation, CancellationToken cancellation )
+    public async ValueTask Invoke( IOperation operation, CancellationToken cancellation )
     {
         ArgumentNullException.ThrowIfNull( operation );
 
+        var invoke = Unsafe.As<Func<object, IOperation, CancellationToken, ValueTask>>( descriptor.Invoke );
         try
         {
-            return Unsafe.As<Task>( descriptor.InvokeMethod.Invoke( instance.Value, [ operation, cancellation ] ) )!;
+            await invoke( instance.Value, operation, cancellation );
         }
         catch( TargetInvocationException exception )
         {
@@ -64,13 +62,14 @@ sealed file class OperationHandlerInvoker<TResult>( OperationHandlerDescriptor d
 
     public ValueTask DisposeAsync( ) => instance.DisposeAsync();
 
-    public Task<TResult> Invoke( IOperation<TResult> operation, CancellationToken cancellation )
+    public async ValueTask<TResult> Invoke( IOperation<TResult> operation, CancellationToken cancellation )
     {
         ArgumentNullException.ThrowIfNull( operation );
 
+        var invoke = Unsafe.As<Func<object, IOperation<TResult>, CancellationToken, ValueTask<TResult>>>( descriptor.Invoke );
         try
         {
-            return Unsafe.As<Task<TResult>>( descriptor.InvokeMethod.Invoke( instance.Value, [ operation, cancellation ] ) )!;
+            return await invoke( instance.Value, operation, cancellation );
         }
         catch( TargetInvocationException exception )
         {
@@ -101,26 +100,21 @@ sealed file class OperationHandlerInstance : IAsyncDisposable
             return new( descriptor.Instance, false );
         }
 
-        return new(
-            ActivatorUtilities.CreateInstance( serviceProvider, descriptor.HandlerType ),
-            true );
+        return new( ActivatorUtilities.CreateInstance( serviceProvider, descriptor.HandlerType ), true );
     }
 
-    public ValueTask DisposeAsync( )
+    public async ValueTask DisposeAsync( )
     {
         if( owned )
         {
             if( Value is IAsyncDisposable async )
             {
-                return async.DisposeAsync();
+                await async.DisposeAsync();
             }
-
-            if( Value is IDisposable disposable )
+            else if( Value is IDisposable disposable )
             {
                 disposable.Dispose();
             }
         }
-
-        return default;
     }
 }

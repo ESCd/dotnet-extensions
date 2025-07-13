@@ -16,12 +16,12 @@ internal sealed class HandlerDescriptorResolver( IEnumerable<OperationHandlerDes
 
     private static Dictionary<Type, OperationHandlerDescriptor> ToDictionary( IEnumerable<OperationHandlerDescriptor> descriptors )
     {
-        var descriptorsByOperationType = new Dictionary<Type, OperationHandlerDescriptor>();
+        var data = new Dictionary<Type, OperationHandlerDescriptor>();
         foreach( var descriptor in descriptors )
         {
-            descriptorsByOperationType[ descriptor.OperationType ] = descriptor;
+            data[ descriptor.OperationType ] = descriptor;
         }
 
-        return descriptorsByOperationType;
+        return data;
     }
 }

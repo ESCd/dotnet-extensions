@@ -43,7 +43,7 @@ public sealed class OperationServiceExtensionsTests
 
     private sealed class TestHandler : IOperationHandler<TestOperation>, IOperationHandler<OtherTestOperation>
     {
-        public Task Invoke( TestOperation operation, CancellationToken cancellation ) => throw new NotImplementedException();
-        public Task Invoke( OtherTestOperation operation, CancellationToken cancellation ) => throw new NotImplementedException();
+        public ValueTask Invoke( TestOperation operation, CancellationToken cancellation ) => throw new NotImplementedException();
+        public ValueTask Invoke( OtherTestOperation operation, CancellationToken cancellation ) => throw new NotImplementedException();
     }
 }

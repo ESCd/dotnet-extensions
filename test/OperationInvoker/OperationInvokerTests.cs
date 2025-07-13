@@ -97,10 +97,10 @@ public sealed class OperationInvokerTests
     {
         public bool WasInvoked { get; private set; }
 
-        public Task Invoke( TestOperation operation, CancellationToken cancellation )
+        public ValueTask Invoke( TestOperation operation, CancellationToken cancellation )
         {
             WasInvoked = true;
-            return Task.CompletedTask;
+            return ValueTask.CompletedTask;
         }
     }
 
@@ -108,7 +108,7 @@ public sealed class OperationInvokerTests
     {
         public void Dispose( ) => callback.Invoke();
 
-        public Task Invoke( TestOperation operation, CancellationToken cancellation ) => Task.CompletedTask;
+        public ValueTask Invoke( TestOperation operation, CancellationToken cancellation ) => ValueTask.CompletedTask;
 
         public sealed record class DisposalCallback
         {
@@ -123,16 +123,16 @@ public sealed class OperationInvokerTests
     {
         public bool WasInvoked { get; private set; }
 
-        public Task<string> Invoke( TestOperationWithResult operation, CancellationToken cancellation )
+        public ValueTask<string> Invoke( TestOperationWithResult operation, CancellationToken cancellation )
         {
             WasInvoked = true;
-            return Task.FromResult( "Hello, World!" );
+            return ValueTask.FromResult( "Hello, World!" );
         }
     }
 
     private sealed class HandlerThatThrows : IOperationHandler<TestOperation>, IOperationHandler<TestOperationWithResult, string>
     {
-        public Task Invoke( TestOperation operation, CancellationToken cancellation ) => throw new NotImplementedException();
-        public Task<string> Invoke( TestOperationWithResult operation, CancellationToken cancellation ) => throw new NotImplementedException();
+        public ValueTask Invoke( TestOperation operation, CancellationToken cancellation ) => throw new NotImplementedException();
+        public ValueTask<string> Invoke( TestOperationWithResult operation, CancellationToken cancellation ) => throw new NotImplementedException();
     }
 }
