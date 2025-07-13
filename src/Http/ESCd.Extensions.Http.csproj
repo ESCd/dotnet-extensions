@@ -4,6 +4,7 @@
     <Description>Common extensions and utilities for working with HttpClient.</Description>
     <PackageProjectUrl>$(PackageProjectUrl)tree/develop/src/Http</PackageProjectUrl>
     <PackageReadmeFile>README.md</PackageReadmeFile>
+    <MinVerTagPrefix>http-v</MinVerTagPrefix>
     <TargetFrameworks>net8.0;net9.0;</TargetFrameworks>
   </PropertyGroup>
 

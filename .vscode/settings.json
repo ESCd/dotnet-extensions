@@ -3,9 +3,9 @@
   "csharp.debug.symbolOptions.searchNuGetOrgSymbolServer": true,
   "csharp.debug.symbolOptions.moduleFilter.mode": "loadOnlyIncluded",
   "csharp.debug.symbolOptions.moduleFilter.includedModules": [
-    "CommunityToolkit.*.dll",
     "Microsoft.*.dll",
   ],
+  "csharp.format.enable": true,
   "csharp.suppressBuildAssetsNotification": true,
   "csharp.suppressHiddenDiagnostics": false,
   "dotnet.backgroundAnalysis.analyzerDiagnosticsScope": "fullSolution",
@@ -13,6 +13,7 @@
   "dotnet.codeLens.enableReferencesCodeLens": false,
   "dotnet.codeLens.enableTestsCodeLens": false,
   "dotnet.defaultSolution": "dotnet-extensions.slnx",
+  "dotnet.formatting.organizeImportsOnFormat": true,
   "dotnet.navigation.navigateToDecompiledSources": true,
   "explorer.fileNesting.enabled": true,
   "explorer.fileNesting.patterns": {
@@ -20,6 +21,12 @@
     "*.csproj": "${capture}.csproj.user,packages.lock.json",
     "*.json": "${capture}.*.json",
     "*.razor": "${capture}.razor.cs, ${capture}.razor.css, ${capture}.razor.js",
+  },
+  "files.associations": {
+    "*.slnf": "json",
+    "*.*proj": "xml",
+    "*.props": "xml",
+    "*.targets": "xml",
   },
   "files.exclude": {
     "**/.git": true,
@@ -35,11 +42,13 @@
   },
   "html.format.wrapAttributes": "auto",
   "html.format.wrapLineLength": 0,
-  "omnisharp.enableLspDriver": true,
+  // "omnisharp.enableLspDriver": true,
   "omnisharp.enableEditorConfigSupport": true,
-  "omnisharp.organizeImportsOnFormat": true,
-  "omnisharp.sdkIncludePrereleases": true,
+  "omnisharp.projectFilesExcludePattern": "**/node_modules/**,**/.git/**,**/bower_components/**,**/.vs/**,**/bin/**,**/obj/**",
+  "omnisharp.sdkIncludePrereleases": false,
   "omnisharp.useEditorFormattingSettings": false,
   "omnisharp.useModernNet": true,
   "npm.packageManager": "npm",
+  "razor.format.enable": true,
+  "razor.languageServer.useNewFormattingEngine": true,
 }
