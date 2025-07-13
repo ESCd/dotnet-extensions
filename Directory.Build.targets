@@ -1,10 +1,25 @@
 <Project>
 
+  <PropertyGroup Condition=" '$(IsBenchmarkProject)' == 'true' ">
+    <IsPackable>false</IsPackable>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+    <Optimize Condition=" '$(Configuration)' == 'Release' ">true</Optimize>
+    <NoWarn>CS1591;SA1600</NoWarn>
+    <OutputType>Exe</OutputType>
+  </PropertyGroup>
+
   <PropertyGroup Condition=" '$(IsTestProject)' == 'true' ">
     <GenerateDocumentationFile>false</GenerateDocumentationFile>
     <MinVerSkip>true</MinVerSkip>
     <NoWarn>$(NoWarn);CS1591;CA1707;</NoWarn>
   </PropertyGroup>
+
+  <ItemGroup Condition=" '$(IsBenchmarkProject)' == 'true' ">
+    <PackageReference Include="BenchmarkDotNet" Version="0.15.2" />
+    <!-- <PackageReference Include="BenchmarkDotNet.Diagnostics.Windows" Version="0.15.2" /> -->
+
+    <Using Include="BenchmarkDotNet.Attributes" />
+  </ItemGroup>
 
   <ItemGroup Condition=" '$(IsTestProject)' == 'true' ">
     <PackageReference Include="coverlet.collector" Version="6.0.4" />

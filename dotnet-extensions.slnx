@@ -1,4 +1,8 @@
 <Solution>
+  <Folder Name="/benchmark/" />
+  <Folder Name="/benchmark/OperationInvoker/">
+    <Project Path="benchmark/OperationInvoker/ESCd.Extensions.OperationInvoker.Benchmarks.csproj" />
+  </Folder>
   <Folder Name="/src/">
     <Project Path="src/Http/ESCd.Extensions.Http.csproj" />
     <Project Path="src/OperationInvoker/ESCd.Extensions.OperationInvoker.csproj" />
