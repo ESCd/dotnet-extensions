@@ -16,6 +16,7 @@ public static class AsyncCacheServiceExtensions
         services.AddMemoryCache()
             .TryAddSingleton<IAsyncCache, AsyncCache>();
 
+        services.AddOptions<AsyncCacheOptions>();
         return services;
     }
 }
