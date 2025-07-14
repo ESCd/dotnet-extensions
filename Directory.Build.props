@@ -31,7 +31,7 @@
 
   <!-- Git Versioning + Metadata -->
   <PropertyGroup>
-    <MinVerDefaultPreReleaseIdentifiers>rc</MinVerDefaultPreReleaseIdentifiers>
+    <MinVerDefaultPreReleaseIdentifiers>rc.1</MinVerDefaultPreReleaseIdentifiers>
     <MinVerIgnoreHeight>true</MinVerIgnoreHeight>
     <MinVerMinimumMajorMinor>1.0</MinVerMinimumMajorMinor>
     <MinVerTagPrefix>v</MinVerTagPrefix>

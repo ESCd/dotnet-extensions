@@ -15,7 +15,7 @@ internal sealed class OperationInvoker( HandlerDescriptorResolver descriptorReso
             ResolveHandlerDescriptor( operation.GetType() ),
             serviceProvider );
 
-        await invoker.Invoke( operation, cancellation );
+        await invoker.Invoke( operation, cancellation ).ConfigureAwait( false );
     }
 
     public async ValueTask<TResult> Invoke<TResult>( IOperation<TResult> operation, CancellationToken cancellation )
@@ -26,7 +26,7 @@ internal sealed class OperationInvoker( HandlerDescriptorResolver descriptorReso
             ResolveHandlerDescriptor( operation.GetType() ),
             serviceProvider );
 
-        return await invoker.Invoke( operation, cancellation );
+        return await invoker.Invoke( operation, cancellation ).ConfigureAwait( false );
     }
 
     [MethodImpl( MethodImplOptions.AggressiveInlining )]
@@ -46,7 +46,7 @@ sealed file class OperationHandlerInvoker( OperationHandlerDescriptor descriptor
         var invoke = Unsafe.As<Func<object, IOperation, CancellationToken, ValueTask>>( descriptor.Invoke );
         try
         {
-            await invoke( instance.Value, operation, cancellation );
+            await invoke( instance.Value, operation, cancellation ).ConfigureAwait( false );
         }
         catch( TargetInvocationException exception )
         {
@@ -69,7 +69,7 @@ sealed file class OperationHandlerInvoker<TResult>( OperationHandlerDescriptor d
         var invoke = Unsafe.As<Func<object, IOperation<TResult>, CancellationToken, ValueTask<TResult>>>( descriptor.Invoke );
         try
         {
-            return await invoke( instance.Value, operation, cancellation );
+            return await invoke( instance.Value, operation, cancellation ).ConfigureAwait( false );
         }
         catch( TargetInvocationException exception )
         {
@@ -109,7 +109,7 @@ sealed file class OperationHandlerInstance : IAsyncDisposable
         {
             if( Value is IAsyncDisposable async )
             {
-                await async.DisposeAsync();
+                await async.DisposeAsync().ConfigureAwait( false );
             }
             else if( Value is IDisposable disposable )
             {
