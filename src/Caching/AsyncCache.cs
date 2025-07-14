@@ -1,14 +1,18 @@
 using System.Collections.Concurrent;
 using ESCd.Extensions.Caching.Abstractions;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
 
 namespace ESCd.Extensions.Caching;
 
-internal sealed class AsyncCache( IMemoryCache cache ) : IAsyncCache, IDisposable
+internal sealed class AsyncCache(
+    IMemoryCache cache,
+    IOptionsMonitor<AsyncCacheOptions> options ) : IAsyncCache, IDisposable
 {
     private bool disposed;
     private readonly ConcurrentDictionary<CacheKey, AsyncCacheLock> locks = [];
+    private readonly IOptionsMonitor<AsyncCacheOptions> options = options;
 
     public void Dispose( )
     {
@@ -31,6 +35,12 @@ internal sealed class AsyncCache( IMemoryCache cache ) : IAsyncCache, IDisposabl
         ArgumentNullException.ThrowIfNull( key );
         ArgumentNullException.ThrowIfNull( factory );
         ObjectDisposedException.ThrowIf( disposed, this );
+
+        if( options.CurrentValue.IsDisabled )
+        {
+            using var entry = new CacheEntryBuilder( key );
+            return await factory( entry, cancellation ).ConfigureAwait( false );
+        }
 
         if( cache.TryGetValue<T>( key, out var value ) )
         {
@@ -71,6 +81,11 @@ internal sealed class AsyncCache( IMemoryCache cache ) : IAsyncCache, IDisposabl
     public async ValueTask<T> SetAsync<T>( CacheKey key, T value, MemoryCacheEntryOptions options, CancellationToken cancellation )
     {
         ArgumentNullException.ThrowIfNull( key );
+
+        if( this.options.CurrentValue.IsDisabled )
+        {
+            return value;
+        }
 
         using( await locks.GetOrAdd( key, _ => new() ).Aquire( cancellation ).ConfigureAwait( false ) )
         {
