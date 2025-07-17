@@ -6,14 +6,24 @@ using Microsoft.Extensions.Primitives;
 
 namespace ESCd.Extensions.Caching;
 
-internal sealed class AsyncCache(
+/// <summary> The default implementation of <see cref="IAsyncCache"/>. </summary>
+/// <param name="cache"> The underlying <see cref="IMemoryCache"/> used to store values. </param>
+/// <param name="options"> The options to be used to configure this instance. </param>
+public sealed class AsyncCache(
     IMemoryCache cache,
-    IOptionsMonitor<AsyncCacheOptions> options ) : IAsyncCache, IDisposable
+    IOptions<AsyncCacheOptions> options ) : IAsyncCache, IDisposable
 {
     private bool disposed;
     private readonly ConcurrentDictionary<CacheKey, AsyncCacheLock> locks = [];
-    private readonly IOptionsMonitor<AsyncCacheOptions> options = options;
+    private readonly IOptions<AsyncCacheOptions> options = options;
 
+    private async Task<IDisposable> AcquireLock( CacheKey key, CancellationToken cancellation )
+    {
+        ArgumentNullException.ThrowIfNull( key );
+        return await locks.GetOrAdd( key, _ => new() ).Aquire( cancellation ).ConfigureAwait( false );
+    }
+
+    /// <inheritdoc />
     public void Dispose( )
     {
         if( !disposed )
@@ -30,13 +40,14 @@ internal sealed class AsyncCache(
         GC.SuppressFinalize( this );
     }
 
+    /// <inheritdoc />
     public async ValueTask<T?> GetOrCreateAsync<T>( CacheKey key, Func<ICacheEntryBuilder, CancellationToken, ValueTask<T>> factory, CancellationToken cancellation )
     {
         ArgumentNullException.ThrowIfNull( key );
         ArgumentNullException.ThrowIfNull( factory );
         ObjectDisposedException.ThrowIf( disposed, this );
 
-        if( options.CurrentValue.IsDisabled )
+        if( options.Value.IsDisabled )
         {
             using var entry = new CacheEntryBuilder( key );
             return await factory( entry, cancellation ).ConfigureAwait( false );
@@ -47,7 +58,7 @@ internal sealed class AsyncCache(
             return value;
         }
 
-        using( await locks.GetOrAdd( key, _ => new() ).Aquire( cancellation ).ConfigureAwait( false ) )
+        using( await AcquireLock( key, cancellation ) )
         {
             if( cache.TryGetValue( key, out value ) )
             {
@@ -66,6 +77,7 @@ internal sealed class AsyncCache(
         }
     }
 
+    /// <inheritdoc />
     public void Remove( CacheKey key )
     {
         ArgumentNullException.ThrowIfNull( key );
@@ -78,19 +90,20 @@ internal sealed class AsyncCache(
         }
     }
 
-    public async ValueTask<T> SetAsync<T>( CacheKey key, T value, MemoryCacheEntryOptions options, CancellationToken cancellation )
+    /// <inheritdoc />
+    public async ValueTask<T> SetAsync<T>( CacheKey key, T value, MemoryCacheEntryOptions? options, CancellationToken cancellation )
     {
         ArgumentNullException.ThrowIfNull( key );
+        ObjectDisposedException.ThrowIf( disposed, this );
 
-        if( this.options.CurrentValue.IsDisabled )
+        if( this.options.Value.IsDisabled )
         {
             return value;
         }
 
-        using( await locks.GetOrAdd( key, _ => new() ).Aquire( cancellation ).ConfigureAwait( false ) )
+        using( await AcquireLock( key, cancellation ) )
         {
-            cache.Set( key, value, options );
-            return value;
+            return cache.Set( key, value, options );
         }
     }
 
@@ -149,7 +162,6 @@ sealed file class CacheEntryBuilder( CacheKey key ) : ICacheEntryBuilder
     public DateTimeOffset? AbsoluteExpiration { get; set; }
     public TimeSpan? AbsoluteExpirationRelativeToNow { get; set; }
     public IList<IChangeToken> ExpirationTokens { get; } = [];
-    public object Key { get; } = key;
     public IList<PostEvictionCallbackRegistration> PostEvictionCallbacks { get; } = [];
     public CacheItemPriority Priority { get; set; }
     public long? Size { get; set; }
@@ -157,19 +169,20 @@ sealed file class CacheEntryBuilder( CacheKey key ) : ICacheEntryBuilder
     public object? Value { get; set; }
 
     public bool IsPrevented { get; private set; }
+    public CacheKey Key { get; } = key;
 
     public void Dispose( )
     {
     }
 
-    public ICacheEntryBuilder PreventCaching( )
+    public ICacheEntryBuilder PreventCaching( bool prevent = true )
     {
-        if( IsPrevented )
+        if( IsPrevented == prevent )
         {
             return this;
         }
 
-        IsPrevented = true;
+        IsPrevented = prevent;
         return this;
     }
 

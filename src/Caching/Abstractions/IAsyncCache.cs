@@ -22,5 +22,5 @@ public interface IAsyncCache
     /// <param name="value"> The value to be stored in the entry. </param>
     /// <param name="options"> The options to be used to create the entry. </param>
     /// <param name="cancellation"> A token that cancels cache access. </param>
-    public ValueTask<T> SetAsync<T>( CacheKey key, T value, MemoryCacheEntryOptions options, CancellationToken cancellation );
+    public ValueTask<T> SetAsync<T>( CacheKey key, T value, MemoryCacheEntryOptions? options, CancellationToken cancellation );
 }

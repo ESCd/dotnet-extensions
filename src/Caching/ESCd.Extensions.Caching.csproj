@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <InternalsVisibleTo Include="ESCd.Extensions.Http.Tests" />
+    <InternalsVisibleTo Include="ESCd.Extensions.Caching.Tests" />
     <SupportedPlatform Include="browser" />
   </ItemGroup>
 
