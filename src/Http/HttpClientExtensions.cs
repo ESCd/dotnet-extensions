@@ -5,8 +5,6 @@ namespace ESCd.Extensions.Http;
 /// <summary> Extensions to <see cref="HttpClient"/>. </summary>
 public static class HttpClientExtensions
 {
-    private const string ContentStreamTag = "ESCd.Extensions.Http.RecyclableStream";
-
     /// <summary> Send a GET request to the specified Uri and return the response body as a recyclable stream. </summary>
     /// <param name="http"> The <see cref="HttpClient"/> to make the request with. </param>
     /// <param name="url"> The url to be requested. </param>
@@ -17,22 +15,7 @@ public static class HttpClientExtensions
         ArgumentNullException.ThrowIfNull( http );
         ArgumentNullException.ThrowIfNull( streamManager );
 
-        using var response = await http.GetAsync( url, cancellation ).ConfigureAwait( false )!;
-
-        var length = response.EnsureSuccessStatusCode().Content.Headers.ContentLength;
-        var stream = length.HasValue ? streamManager.GetStream( ContentStreamTag, length.Value ) : streamManager.GetStream( ContentStreamTag );
-
-        try
-        {
-            await response.Content.CopyToAsync( stream, cancellation ).ConfigureAwait( false );
-
-            stream.Seek( 0, SeekOrigin.Begin );
-            return stream;
-        }
-        catch
-        {
-            await stream.DisposeAsync().ConfigureAwait( false );
-            throw;
-        }
+        using var response = await http.GetAsync( url, cancellation ).ConfigureAwait( false );
+        return await response.Content.ReadAsStreamAsync( streamManager, cancellation ).ConfigureAwait( false );
     }
 }

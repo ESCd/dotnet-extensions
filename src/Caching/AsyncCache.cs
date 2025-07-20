@@ -20,7 +20,10 @@ public sealed class AsyncCache(
     private async Task<IDisposable> AcquireLock( CacheKey key, CancellationToken cancellation )
     {
         ArgumentNullException.ThrowIfNull( key );
-        return await locks.GetOrAdd( key, _ => new() ).Aquire( cancellation ).ConfigureAwait( false );
+
+        return await locks.GetOrAdd( key, _ => new( _ ) )
+            .Aquire( cancellation )
+            .ConfigureAwait( false );
     }
 
     /// <inheritdoc />
@@ -107,7 +110,7 @@ public sealed class AsyncCache(
         }
     }
 
-    private sealed class AsyncCacheLock : IDisposable
+    private sealed class AsyncCacheLock( CacheKey key ) : IDisposable
     {
         private readonly SemaphoreSlim locker = new( 1, 1 );
 
@@ -115,6 +118,7 @@ public sealed class AsyncCache(
 
         public int Count => count;
         public bool IsRemoved { get; private set; }
+        public CacheKey Key { get; } = key;
 
         public async Task<AsyncCacheRelease> Aquire( CancellationToken cancellation )
         {
