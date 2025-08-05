@@ -61,7 +61,7 @@ public sealed class AsyncCache(
             return value;
         }
 
-        using( await AcquireLock( key, cancellation ) )
+        using( await AcquireLock( key, cancellation ).ConfigureAwait( false ) )
         {
             if( cache.TryGetValue( key, out value ) )
             {
@@ -104,7 +104,7 @@ public sealed class AsyncCache(
             return value;
         }
 
-        using( await AcquireLock( key, cancellation ) )
+        using( await AcquireLock( key, cancellation ).ConfigureAwait( false ) )
         {
             return cache.Set( key, value, options );
         }
