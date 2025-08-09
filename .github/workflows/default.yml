@@ -160,7 +160,7 @@ jobs:
             9.0.x
 
       - name: Download artifact 'packages'
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           name: packages
 
