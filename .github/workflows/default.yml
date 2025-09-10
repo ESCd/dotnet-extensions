@@ -18,10 +18,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Setup .NET Core
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v5
         with:
           cache: true
           cache-dependency-path: ./**/packages.lock.json
@@ -39,10 +39,10 @@ jobs:
     needs: [build]
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Setup .NET Core
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v5
         with:
           cache: true
           cache-dependency-path: ./**/packages.lock.json
@@ -116,12 +116,12 @@ jobs:
     needs: [test]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           fetch-depth: 0
 
       - name: Setup .NET Core
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v5
         with:
           cache: true
           cache-dependency-path: ./**/packages.lock.json
@@ -133,7 +133,7 @@ jobs:
         run: dotnet restore --locked-mode
 
       - name: Create packages
-        run: dotnet pack --configuration Release --output dist /p:WarningLevel=0
+        run: dotnet pack --configuration Release --output dist --no-restore /p:WarningLevel=0
 
       - name: Upload artifact 'packages'
         uses: actions/upload-artifact@v4
@@ -152,7 +152,7 @@ jobs:
           sparse-checkout: global.json
 
       - name: Setup .NET Core
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v5
         with:
           cache: false
           dotnet-version: |

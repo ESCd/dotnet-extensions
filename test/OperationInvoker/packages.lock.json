@@ -25,9 +25,9 @@
       },
       "Microsoft.NET.ILLink.Tasks": {
         "type": "Direct",
-        "requested": "[8.0.19, )",
-        "resolved": "8.0.19",
-        "contentHash": "IhHf+zeZiaE5EXRyxILd4qM+Hj9cxV3sa8MpzZgeEhpvaG3a1VEGF6UCaPFLO44Kua3JkLKluE0SWVamS50PlA=="
+        "requested": "[8.0.20, )",
+        "resolved": "8.0.20",
+        "contentHash": "Rhcto2AjGvTO62+/VTmBpumBOmqIGp7nYEbTbmEXkCq4yPGxV8whju3/HsIA/bKyo2+DggaYk5+/8sxb1AbPTw=="
       },
       "Microsoft.NET.Test.Sdk": {
         "type": "Direct",
@@ -68,9 +68,9 @@
       },
       "xunit.analyzers": {
         "type": "Direct",
-        "requested": "[1.23.0, )",
-        "resolved": "1.23.0",
-        "contentHash": "WCkO1FPTWoESLhghoXA881CulRYpve0UrXLsL5aYcLQd9SlD+oADb16NAP+SE5o3w0FM2MzGTklBwY8yUfj0ng=="
+        "requested": "[1.24.0, )",
+        "resolved": "1.24.0",
+        "contentHash": "kxaoMFFZcQ+mJudaKKlt3gCqV6M6Gjbka0NEs8JFDrxn52O7w5OOnYfSYVfqusk8p7pxrGdjgaQHlGINsNZHAQ=="
       },
       "xunit.runner.console": {
         "type": "Direct",
@@ -80,9 +80,9 @@
       },
       "xunit.runner.visualstudio": {
         "type": "Direct",
-        "requested": "[3.1.3, )",
-        "resolved": "3.1.3",
-        "contentHash": "go7e81n/UI3LeNqoJIJ3thkS4JfJtiQnDbAxLh09JkJqoHthnfbLS5p68s4/Bm12B9umkoYSB5SaDr68hZNleg=="
+        "requested": "[3.1.4, )",
+        "resolved": "3.1.4",
+        "contentHash": "5mj99LvCqrq3CNi06xYdyIAXOEh+5b33F2nErCzI5zWiDdLHXiPXEWFSUAF8zlIv0ZWqjZNCwHTQeAPYbF3pCg=="
       },
       "Microsoft.Build.Tasks.Git": {
         "type": "Transitive",
@@ -196,18 +196,18 @@
       },
       "Microsoft.Extensions.DependencyInjection": {
         "type": "Direct",
-        "requested": "[9.0.8, )",
-        "resolved": "9.0.8",
-        "contentHash": "JJjI2Fa+QtZcUyuNjbKn04OjIUX5IgFGFu/Xc+qvzh1rXdZHLcnqqVXhR4093bGirTwacRlHiVg1XYI9xum6QQ==",
+        "requested": "[9.0.9, )",
+        "resolved": "9.0.9",
+        "contentHash": "zQV2WOSP+3z1EuK91ULxfGgo2Y75bTRnmJHp08+w/YXAyekZutX/qCd88/HOMNh35MDW9mJJJxPpMPS+1Rww8A==",
         "dependencies": {
-          "Microsoft.Extensions.DependencyInjection.Abstractions": "9.0.8"
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "9.0.9"
         }
       },
       "Microsoft.NET.ILLink.Tasks": {
         "type": "Direct",
-        "requested": "[9.0.8, )",
-        "resolved": "9.0.8",
-        "contentHash": "rd1CbIsMtVPtZNTIVD6Xydue//klYOOQIDpRgu3BHtv17AlpRs74/6QFbcYgMm/jL+naVU2T3OFLxVSLV5lQLQ=="
+        "requested": "[9.0.9, )",
+        "resolved": "9.0.9",
+        "contentHash": "cHi1os/s6aobEgNkbOh/jW+ru//rHuedvj4PmTh2mMY7et/mJjqphBeXeKCesDvMd0+E2JyX9EPZZC4VRKslXg=="
       },
       "Microsoft.NET.Test.Sdk": {
         "type": "Direct",
@@ -248,9 +248,9 @@
       },
       "xunit.analyzers": {
         "type": "Direct",
-        "requested": "[1.23.0, )",
-        "resolved": "1.23.0",
-        "contentHash": "WCkO1FPTWoESLhghoXA881CulRYpve0UrXLsL5aYcLQd9SlD+oADb16NAP+SE5o3w0FM2MzGTklBwY8yUfj0ng=="
+        "requested": "[1.24.0, )",
+        "resolved": "1.24.0",
+        "contentHash": "kxaoMFFZcQ+mJudaKKlt3gCqV6M6Gjbka0NEs8JFDrxn52O7w5OOnYfSYVfqusk8p7pxrGdjgaQHlGINsNZHAQ=="
       },
       "xunit.runner.console": {
         "type": "Direct",
@@ -260,9 +260,9 @@
       },
       "xunit.runner.visualstudio": {
         "type": "Direct",
-        "requested": "[3.1.3, )",
-        "resolved": "3.1.3",
-        "contentHash": "go7e81n/UI3LeNqoJIJ3thkS4JfJtiQnDbAxLh09JkJqoHthnfbLS5p68s4/Bm12B9umkoYSB5SaDr68hZNleg=="
+        "requested": "[3.1.4, )",
+        "resolved": "3.1.4",
+        "contentHash": "5mj99LvCqrq3CNi06xYdyIAXOEh+5b33F2nErCzI5zWiDdLHXiPXEWFSUAF8zlIv0ZWqjZNCwHTQeAPYbF3pCg=="
       },
       "Microsoft.Build.Tasks.Git": {
         "type": "Transitive",
@@ -276,8 +276,8 @@
       },
       "Microsoft.Extensions.DependencyInjection.Abstractions": {
         "type": "Transitive",
-        "resolved": "9.0.8",
-        "contentHash": "xY3lTjj4+ZYmiKIkyWitddrp1uL5uYiweQjqo4BKBw01ZC4HhcfgLghDpPZcUlppgWAFqFy9SgkiYWOMx365pw=="
+        "resolved": "9.0.9",
+        "contentHash": "/hymojfWbE9AlDOa0mczR44m00Jj+T3+HZO0ZnVTI032fVycI0ZbNOVFP6kqZMcXiLSYXzR2ilcwaRi6dzeGyA=="
       },
       "Microsoft.SourceLink.Common": {
         "type": "Transitive",
@@ -357,7 +357,7 @@
       "escd.extensions.operationinvoker": {
         "type": "Project",
         "dependencies": {
-          "Microsoft.Extensions.DependencyInjection.Abstractions": "[9.0.8, )"
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "[9.0.9, )"
         }
       }
     }
