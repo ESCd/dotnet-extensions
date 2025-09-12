@@ -136,15 +136,15 @@ public sealed class AsyncCacheTests
                 default ) );
     }
 
-    [Fact( DisplayName = "Remove: throws object disposed" )]
-    public void Remove_DoesThrow_ObjectDisposed( )
+    [Fact( DisplayName = "RemoveAsync: throws object disposed" )]
+    public async Task Remove_DoesThrow_ObjectDisposed( )
     {
         var cache = new AsyncCache(
             new MemoryCache( Options.Create<MemoryCacheOptions>( new() ) ),
             Options.Create<AsyncCacheOptions>( new() ) );
 
         cache.Dispose();
-        Assert.Throws<ObjectDisposedException>( ( ) => cache.Remove( new( nameof( GetOrCreateAsync_DoesThrow_ObjectDisposed ) ) ) );
+        await Assert.ThrowsAsync<ObjectDisposedException>( async ( ) => await cache.RemoveAsync( new( nameof( GetOrCreateAsync_DoesThrow_ObjectDisposed ) ), default ) );
     }
 
     [Fact( DisplayName = "SetAsync: throws object disposed" )]

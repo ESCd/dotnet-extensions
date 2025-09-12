@@ -10,11 +10,12 @@ public interface IAsyncCache
     /// <param name="key"> The entry's key. </param>
     /// <param name="factory"> A method that returns the value to be stored, if an entry doesn't exist. </param>
     /// <param name="cancellation"> A token that cancels cache access. </param>
-    public ValueTask<T?> GetOrCreateAsync<T>( CacheKey key, Func<ICacheEntryBuilder, CancellationToken, ValueTask<T>> factory, CancellationToken cancellation );
+    public ValueTask<T?> GetOrCreateAsync<T>( CacheKey key, Func<ICacheEntryBuilder, CancellationToken, ValueTask<T>> factory, CancellationToken cancellation = default );
 
     /// <summary> Remove an entry. </summary>
     /// <param name="key"> The entry's key. </param>
-    public void Remove( CacheKey key );
+    /// <param name="cancellation"> A token that cancels the operation. </param>
+    public ValueTask RemoveAsync( CacheKey key, CancellationToken cancellation = default );
 
     /// <summary> Set an entry to a given <paramref name="value"/>. </summary>
     /// <typeparam name="T"> The type of the <paramref name="value"/>. </typeparam>
@@ -22,5 +23,5 @@ public interface IAsyncCache
     /// <param name="value"> The value to be stored in the entry. </param>
     /// <param name="options"> The options to be used to create the entry. </param>
     /// <param name="cancellation"> A token that cancels cache access. </param>
-    public ValueTask<T> SetAsync<T>( CacheKey key, T value, MemoryCacheEntryOptions? options, CancellationToken cancellation );
+    public ValueTask<T> SetAsync<T>( CacheKey key, T value, MemoryCacheEntryOptions? options, CancellationToken cancellation = default );
 }

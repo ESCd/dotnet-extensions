@@ -17,15 +17,6 @@ public sealed class AsyncCache(
     private readonly ConcurrentDictionary<CacheKey, AsyncCacheLock> locks = [];
     private readonly IOptions<AsyncCacheOptions> options = options;
 
-    private async Task<IDisposable> AcquireLock( CacheKey key, CancellationToken cancellation )
-    {
-        ArgumentNullException.ThrowIfNull( key );
-
-        return await locks.GetOrAdd( key, _ => new( _ ) )
-            .Aquire( cancellation )
-            .ConfigureAwait( false );
-    }
-
     /// <inheritdoc />
     public void Dispose( )
     {
@@ -61,9 +52,10 @@ public sealed class AsyncCache(
             return value;
         }
 
-        using( await AcquireLock( key, cancellation ).ConfigureAwait( false ) )
+        var locker = GetOrAddLock( key );
+        using( await locker.Acquire( cancellation ).ConfigureAwait( false ) )
         {
-            if( cache.TryGetValue( key, out value ) )
+            if( !locker.IsRemoved && cache.TryGetValue( key, out value ) )
             {
                 return value;
             }
@@ -71,7 +63,7 @@ public sealed class AsyncCache(
             using var entry = new CacheEntryBuilder( key );
 
             value = await factory( entry, cancellation ).ConfigureAwait( false );
-            if( !entry.IsPrevented )
+            if( !locker.IsRemoved && !entry.IsPrevented )
             {
                 return cache.Set( key, value, entry.ToOptions() );
             }
@@ -81,12 +73,16 @@ public sealed class AsyncCache(
     }
 
     /// <inheritdoc />
-    public void Remove( CacheKey key )
+    public async ValueTask RemoveAsync( CacheKey key, CancellationToken cancellation )
     {
         ArgumentNullException.ThrowIfNull( key );
         ObjectDisposedException.ThrowIf( disposed, this );
 
-        cache.Remove( key );
+        using( await GetOrAddLock( key ).Acquire( cancellation ).ConfigureAwait( false ) )
+        {
+            cache.Remove( key );
+        }
+
         if( locks.TryRemove( key, out var locker ) )
         {
             locker.OnRemoved();
@@ -104,11 +100,19 @@ public sealed class AsyncCache(
             return value;
         }
 
-        using( await AcquireLock( key, cancellation ).ConfigureAwait( false ) )
+        var locker = GetOrAddLock( key );
+        using( await locker.Acquire( cancellation ).ConfigureAwait( false ) )
         {
-            return cache.Set( key, value, options );
+            if( !locker.IsRemoved )
+            {
+                return cache.Set( key, value, options );
+            }
         }
+
+        return value;
     }
+
+    private AsyncCacheLock GetOrAddLock( CacheKey key ) => locks.GetOrAdd( key, _ => new( _ ) );
 
     private sealed class AsyncCacheLock( CacheKey key ) : IDisposable
     {
@@ -120,7 +124,7 @@ public sealed class AsyncCache(
         public bool IsRemoved { get; private set; }
         public CacheKey Key { get; } = key;
 
-        public async Task<AsyncCacheRelease> Aquire( CancellationToken cancellation )
+        public async Task<AsyncCacheRelease> Acquire( CancellationToken cancellation )
         {
             Interlocked.Increment( ref count );
             try
