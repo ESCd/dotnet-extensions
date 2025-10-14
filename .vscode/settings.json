@@ -20,7 +20,6 @@
     "*.cs": "${capture}.*.cs",
     "*.csproj": "${capture}.csproj.user,packages.lock.json",
     "*.json": "${capture}.*.json",
-    "*.razor": "${capture}.razor.cs, ${capture}.razor.css, ${capture}.razor.js",
   },
   "files.associations": {
     "*.slnf": "json",
