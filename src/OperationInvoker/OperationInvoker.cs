@@ -5,16 +5,15 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace ESCd.Extensions.OperationInvoker;
 
-internal sealed class OperationInvoker( HandlerDescriptorResolver descriptorResolver, IServiceProvider serviceProvider ) : IOperationInvoker
+internal sealed class OperationInvoker( HandlerDescriptorResolver resolver, IServiceProvider services ) : IOperationInvoker
 {
     public async ValueTask Invoke( IOperation operation, CancellationToken cancellation )
     {
         ArgumentNullException.ThrowIfNull( operation );
 
-        await using var invoker = new OperationHandlerInvoker(
-            ResolveHandlerDescriptor( operation.GetType() ),
-            serviceProvider );
+        var descriptor = ResolveHandlerDescriptor( operation.GetType() );
 
+        await using var invoker = new OperationHandlerInvoker( descriptor, services );
         await invoker.Invoke( operation, cancellation ).ConfigureAwait( false );
     }
 
@@ -22,15 +21,14 @@ internal sealed class OperationInvoker( HandlerDescriptorResolver descriptorReso
     {
         ArgumentNullException.ThrowIfNull( operation );
 
-        await using var invoker = new OperationHandlerInvoker<TResult>(
-            ResolveHandlerDescriptor( operation.GetType() ),
-            serviceProvider );
+        var descriptor = ResolveHandlerDescriptor( operation.GetType() );
 
+        await using var invoker = new OperationHandlerInvoker<TResult>( descriptor, services );
         return await invoker.Invoke( operation, cancellation ).ConfigureAwait( false );
     }
 
     [MethodImpl( MethodImplOptions.AggressiveInlining )]
-    private OperationHandlerDescriptor ResolveHandlerDescriptor( Type type ) => descriptorResolver.Resolve( type ) ?? throw new ArgumentException( $"An IOperationHandler for {type} has not been registered to the service provider.", nameof( type ) );
+    private OperationHandlerDescriptor ResolveHandlerDescriptor( Type type ) => resolver.Resolve( type ) ?? throw new ArgumentException( $"An IOperationHandler for {type} has not been registered to the service provider.", nameof( type ) );
 };
 
 sealed file class OperationHandlerInvoker( OperationHandlerDescriptor descriptor, IServiceProvider serviceProvider ) : IAsyncDisposable
@@ -58,6 +56,7 @@ sealed file class OperationHandlerInvoker( OperationHandlerDescriptor descriptor
 
 sealed file class OperationHandlerInvoker<TResult>( OperationHandlerDescriptor descriptor, IServiceProvider serviceProvider ) : IAsyncDisposable
 {
+    private readonly OperationHandlerDescriptor descriptor = descriptor;
     private readonly OperationHandlerInstance instance = OperationHandlerInstance.Create( serviceProvider, descriptor );
 
     public ValueTask DisposeAsync( ) => instance.DisposeAsync();

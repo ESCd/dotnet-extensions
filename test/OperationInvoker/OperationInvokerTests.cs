@@ -1,3 +1,4 @@
+using System.Numerics;
 using ESCd.Extensions.OperationInvoker.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -13,6 +14,22 @@ public sealed class OperationInvokerTests
         using( var services = new ServiceCollection()
             .AddSingleton( callback )
             .AddOperationHandler<HandlerThatDisposes>()
+            .BuildServiceProvider() )
+        {
+            await services.GetRequiredService<IOperationInvoker>().Invoke( new TestOperation() );
+        }
+
+        Assert.True( callback );
+    }
+
+    [Fact( DisplayName = "Invoke: disposes owned async handlers" )]
+    public async Task Invoke_Disposes_OwnedAsyncHandlers( )
+    {
+        var callback = new HandlerThatDisposesAsync.DisposalCallback();
+
+        using( var services = new ServiceCollection()
+            .AddSingleton( callback )
+            .AddOperationHandler<HandlerThatDisposesAsync>()
             .BuildServiceProvider() )
         {
             await services.GetRequiredService<IOperationInvoker>().Invoke( new TestOperation() );
@@ -54,6 +71,24 @@ public sealed class OperationInvokerTests
         Assert.True( handler.WasInvoked );
     }
 
+    [Fact( DisplayName = "Invoke (unbound generic): invokes operation" )]
+    public async Task Invoke_UnboundGeneric_InvokesOperation( )
+    {
+        using var services = new ServiceCollection()
+            .AddOperationHandler( typeof( GenericHandler<> ) )
+            .BuildServiceProvider();
+
+        var operations = services.GetRequiredService<IOperationInvoker>();
+
+        Assert.Equal(
+            1,
+            await operations.Invoke( new GenericOperationIncrement<int>( 0 ) ) );
+
+        Assert.Equal(
+            0,
+            await operations.Invoke( new GenericOperationDecrement<int>( 1 ) ) );
+    }
+
     [Fact( DisplayName = "Invoke: throws inner exception of target invocation" )]
     public async Task Invoke_Throws_InvocationInnerException( )
     {
@@ -92,6 +127,15 @@ public sealed class OperationInvokerTests
 
     private sealed record TestOperationWithResult : IOperation<string>;
     private sealed record TestOperation : IOperation;
+    private sealed record GenericOperationDecrement<T>( T Value ) : IOperation<T> where T : INumber<T>;
+    private sealed record GenericOperationIncrement<T>( T Value ) : IOperation<T> where T : INumber<T>;
+
+    private sealed class GenericHandler<T> : IOperationHandler<GenericOperationDecrement<T>, T>, IOperationHandler<GenericOperationIncrement<T>, T>
+        where T : INumber<T>
+    {
+        public ValueTask<T> Invoke( GenericOperationDecrement<T> operation, CancellationToken cancellation ) => new( operation.Value - T.One );
+        public ValueTask<T> Invoke( GenericOperationIncrement<T> operation, CancellationToken cancellation ) => new( operation.Value + T.One );
+    }
 
     private sealed class Handler : IOperationHandler<TestOperation>
     {
@@ -114,6 +158,25 @@ public sealed class OperationInvokerTests
         {
             private bool invoked;
             public void Invoke( ) => invoked = true;
+
+            public static implicit operator bool( DisposalCallback callback ) => callback.invoked;
+        }
+    }
+
+    private sealed class HandlerThatDisposesAsync( HandlerThatDisposesAsync.DisposalCallback callback ) : IAsyncDisposable, IOperationHandler<TestOperation>
+    {
+        public ValueTask DisposeAsync( ) => callback.Invoke();
+
+        public ValueTask Invoke( TestOperation operation, CancellationToken cancellation ) => ValueTask.CompletedTask;
+
+        public sealed record class DisposalCallback
+        {
+            private bool invoked;
+            public ValueTask Invoke( )
+            {
+                invoked = true;
+                return default;
+            }
 
             public static implicit operator bool( DisposalCallback callback ) => callback.invoked;
         }

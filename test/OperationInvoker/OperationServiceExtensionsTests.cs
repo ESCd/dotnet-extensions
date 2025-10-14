@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using ESCd.Extensions.OperationInvoker.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -17,6 +18,21 @@ public sealed class OperationServiceExtensionsTests
         Assert.Equal( 2, descriptors.Length );
         Assert.Equal( typeof( TestOperation ), descriptors[ 0 ].OperationType );
         Assert.Equal( typeof( OtherTestOperation ), descriptors[ 1 ].OperationType );
+    }
+
+    [Fact( DisplayName = "AddOperationHandler: adds descriptors for unbound generic handler" )]
+    public void AddOperationHandler_Adds_DescriptorsForUnboundGenericHandler( )
+    {
+        using var services = new ServiceCollection()
+            .AddOperationHandler( typeof( GenericHandler<> ) )
+            .BuildServiceProvider();
+
+        var descriptors = services.GetServices<OperationHandlerDescriptor>().ToArray();
+        Assert.Single( descriptors );
+
+        var descriptor = descriptors[ 0 ];
+        Assert.Equal( typeof( GenericHandler<> ), descriptor.HandlerType );
+        Assert.Equal( typeof( GenericOperation<> ), descriptor.OperationType );
     }
 
     [Fact( DisplayName = "AddOperationHandler: adds invoker" )]
@@ -40,10 +56,16 @@ public sealed class OperationServiceExtensionsTests
 
     private sealed record TestOperation : IOperation;
     private sealed record OtherTestOperation : IOperation;
+    private sealed record GenericOperation<[DynamicallyAccessedMembers( DynamicallyAccessedMemberTypes.All )] T>( T Value ) : IOperation<T>;
 
     private sealed class TestHandler : IOperationHandler<TestOperation>, IOperationHandler<OtherTestOperation>
     {
         public ValueTask Invoke( TestOperation operation, CancellationToken cancellation ) => throw new NotImplementedException();
         public ValueTask Invoke( OtherTestOperation operation, CancellationToken cancellation ) => throw new NotImplementedException();
+    }
+
+    private sealed class GenericHandler<[DynamicallyAccessedMembers( DynamicallyAccessedMemberTypes.All )] T> : IOperationHandler<GenericOperation<T>, T>
+    {
+        public ValueTask<T> Invoke( GenericOperation<T> operation, CancellationToken cancellation ) => new( operation.Value );
     }
 }
