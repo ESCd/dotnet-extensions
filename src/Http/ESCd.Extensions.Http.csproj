@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <InternalsVisibleTo Include="ESCd.Extensions.Http.Tests" />
+
     <SupportedPlatform Include="browser" />
   </ItemGroup>
 
