@@ -1,12 +1,58 @@
 {
   "version": 1,
   "dependencies": {
+    "net10.0": {
+      "Microsoft.CodeAnalysis.NetAnalyzers": {
+        "type": "Direct",
+        "requested": "[10.0.100, )",
+        "resolved": "10.0.100",
+        "contentHash": "uj9VuyvqylnNueJfU7u2PkI/hEMpZl8Wg9BXyI0eatNEldU5jDYPdwsM8aDL18+1oLovju25MiqOPaGRBnG72A=="
+      },
+      "Microsoft.Extensions.DependencyInjection.Abstractions": {
+        "type": "Direct",
+        "requested": "[10.0.0, )",
+        "resolved": "10.0.0",
+        "contentHash": "L3AdmZ1WOK4XXT5YFPEwyt0ep6l8lGIPs7F5OOBZc77Zqeo01Of7XXICy47628sdVl0v/owxYJTe86DTgFwKCA=="
+      },
+      "Microsoft.NET.ILLink.Tasks": {
+        "type": "Direct",
+        "requested": "[10.0.0, )",
+        "resolved": "10.0.0",
+        "contentHash": "kICGrGYEzCNI3wPzfEXcwNHgTvlvVn9yJDhSdRK+oZQy4jvYH529u7O0xf5ocQKzOMjfS07+3z9PKRIjrFMJDA=="
+      },
+      "Microsoft.SourceLink.GitHub": {
+        "type": "Direct",
+        "requested": "[8.0.0, )",
+        "resolved": "8.0.0",
+        "contentHash": "G5q7OqtwIyGTkeIOAc3u2ZuV/kicQaec5EaRnc0pIeSnh9LUjj+PYQrJYBURvDt7twGl2PKA7nSN0kz1Zw5bnQ==",
+        "dependencies": {
+          "Microsoft.Build.Tasks.Git": "8.0.0",
+          "Microsoft.SourceLink.Common": "8.0.0"
+        }
+      },
+      "MinVer": {
+        "type": "Direct",
+        "requested": "[6.0.0, )",
+        "resolved": "6.0.0",
+        "contentHash": "+/SsmiySsXJlvQLCGBqaZKNVt3s/Y/HbAdwtop7Km2CnuZbaScoqkWJEBQ5Cy9ebkn6kCYKrHsXgwrFdTgcb3g=="
+      },
+      "Microsoft.Build.Tasks.Git": {
+        "type": "Transitive",
+        "resolved": "8.0.0",
+        "contentHash": "bZKfSIKJRXLTuSzLudMFte/8CempWjVamNUR5eHJizsy+iuOuO/k2gnh7W0dHJmYY0tBf+gUErfluCv5mySAOQ=="
+      },
+      "Microsoft.SourceLink.Common": {
+        "type": "Transitive",
+        "resolved": "8.0.0",
+        "contentHash": "dk9JPxTCIevS75HyEQ0E4OVAFhB2N+V9ShCXf8Q6FkUQZDkgLI12y679Nym1YqsiSysuQskT7Z+6nUf3yab6Vw=="
+      }
+    },
     "net8.0": {
       "Microsoft.CodeAnalysis.NetAnalyzers": {
         "type": "Direct",
-        "requested": "[9.0.0, )",
-        "resolved": "9.0.0",
-        "contentHash": "JajbvkrBgtdRghavIjcJuNHMOja4lqBmEezbhZyqWPYh2cpLhT5mPpfC7NQVDO4IehWQum9t/nwF4v+qQGtYWg=="
+        "requested": "[10.0.100, )",
+        "resolved": "10.0.100",
+        "contentHash": "uj9VuyvqylnNueJfU7u2PkI/hEMpZl8Wg9BXyI0eatNEldU5jDYPdwsM8aDL18+1oLovju25MiqOPaGRBnG72A=="
       },
       "Microsoft.Extensions.DependencyInjection.Abstractions": {
         "type": "Direct",
@@ -16,9 +62,9 @@
       },
       "Microsoft.NET.ILLink.Tasks": {
         "type": "Direct",
-        "requested": "[8.0.21, )",
-        "resolved": "8.0.21",
-        "contentHash": "s8H5PZQs50OcNkaB6Si54+v3GWM7vzs6vxFRMlD3aXsbM+aPCtod62gmK0BYWou9diGzmo56j8cIf/PziijDqQ=="
+        "requested": "[8.0.22, )",
+        "resolved": "8.0.22",
+        "contentHash": "MhcMithKEiyyNkD2ZfbDZPmcOdi0GheGfg8saEIIEfD/fol3iHmcV8TsZkD4ZYz5gdUuoX4YtlVySUU7Sxl9SQ=="
       },
       "Microsoft.SourceLink.GitHub": {
         "type": "Direct",
@@ -50,21 +96,21 @@
     "net9.0": {
       "Microsoft.CodeAnalysis.NetAnalyzers": {
         "type": "Direct",
-        "requested": "[9.0.0, )",
-        "resolved": "9.0.0",
-        "contentHash": "JajbvkrBgtdRghavIjcJuNHMOja4lqBmEezbhZyqWPYh2cpLhT5mPpfC7NQVDO4IehWQum9t/nwF4v+qQGtYWg=="
+        "requested": "[10.0.100, )",
+        "resolved": "10.0.100",
+        "contentHash": "uj9VuyvqylnNueJfU7u2PkI/hEMpZl8Wg9BXyI0eatNEldU5jDYPdwsM8aDL18+1oLovju25MiqOPaGRBnG72A=="
       },
       "Microsoft.Extensions.DependencyInjection.Abstractions": {
         "type": "Direct",
-        "requested": "[9.0.10, )",
-        "resolved": "9.0.10",
-        "contentHash": "r9waLiOPe9ZF1PvzUT+RDoHvpMmY8MW+lb4lqjYGObwKpnyPMLI3odVvlmshwuZcdoHynsGWOrCPA0hxZ63lIA=="
+        "requested": "[9.0.11, )",
+        "resolved": "9.0.11",
+        "contentHash": "+ZxxZzcVU+IEzq12GItUzf/V3mEc5nSLiXijwvDc4zyhbjvSZZ043giSZqGnhakrjwRWjkerIHPrRwm9okEIpw=="
       },
       "Microsoft.NET.ILLink.Tasks": {
         "type": "Direct",
-        "requested": "[9.0.10, )",
-        "resolved": "9.0.10",
-        "contentHash": "sseaSJcBxKEpkc59hnB00b3NmJdGvJLfj74HK+nucHxERxbZSUREuWKjC9ywc+HdzJvJyiP2eiyEOROaGSfcPw=="
+        "requested": "[9.0.11, )",
+        "resolved": "9.0.11",
+        "contentHash": "vvB9rtDmWaXgYkViT00KORBVmA3pcYsHlgd9vOPqL9sf5bKy3rvLMF1+sI1uUfVj28S3itirHlHmX5/kcpZKNw=="
       },
       "Microsoft.SourceLink.GitHub": {
         "type": "Direct",

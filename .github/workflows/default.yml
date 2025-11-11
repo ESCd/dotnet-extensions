@@ -28,6 +28,7 @@ jobs:
           dotnet-version: |
             8.0.x
             9.0.x
+            10.0.x
 
       - name: Restore dependencies
         run: dotnet restore --locked-mode
@@ -128,6 +129,7 @@ jobs:
           dotnet-version: |
             8.0.x
             9.0.x
+            10.0.x
 
       - name: Restore dependencies
         run: dotnet restore --locked-mode
@@ -158,6 +160,7 @@ jobs:
           dotnet-version: |
             8.0.x
             9.0.x
+            10.0.x
 
       - name: Download artifact 'packages'
         uses: actions/download-artifact@v5
