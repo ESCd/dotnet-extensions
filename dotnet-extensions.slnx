@@ -7,6 +7,9 @@
     <Project Path="src/Http/ESCd.Extensions.Http.csproj" />
     <Project Path="src/OperationInvoker/ESCd.Extensions.OperationInvoker.csproj" />
   </Folder>
+  <Folder Name="/src/ObjectPool/">
+    <Project Path="src/ObjectPool/ESCd.Extensions.ObjectPool.csproj" />
+  </Folder>
   <Folder Name="/test/">
     <Project Path="test/Caching/ESCd.Extensions.Caching.Tests.csproj" />
     <Project Path="test/Http/ESCd.Extensions.Http.Tests.csproj" />
