@@ -22,6 +22,16 @@ public sealed class QueryStringBuilerExtensionTests
         Assert.Empty( builder.ToString() );
     }
 
+    [Fact( DisplayName = "Append (DateOnly): appends date string" )]
+    public void Append_DateOnly_AppendsDateString( )
+    {
+        var now = DateOnly.FromDateTime( DateTime.Now );
+        var builder = new QueryStringBuilder()
+            .Append( "test", now );
+
+        Assert.Equal( $"?test={Uri.EscapeDataString( now.ToString( CultureInfo.InvariantCulture ) )}", builder.ToString() );
+    }
+
     [Fact( DisplayName = "Append (DateTime): appends ISO date string" )]
     public void Append_DateTime_AppendsISODateString( )
     {
