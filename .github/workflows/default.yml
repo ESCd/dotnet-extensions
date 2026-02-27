@@ -1,4 +1,4 @@
-﻿name: default
+name: default
 
 env:
   DOTNET_NOLOGO: true
@@ -168,7 +168,7 @@ jobs:
             10.0.x
 
       - name: Download artifact 'packages'
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: packages
 
