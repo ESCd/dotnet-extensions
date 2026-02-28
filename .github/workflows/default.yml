@@ -68,7 +68,7 @@ jobs:
         shell: pwsh
 
       - name: Upload artifact 'test-results'
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         if: success() || failure()
         with:
           name: test-results
@@ -91,7 +91,7 @@ jobs:
           title: coverage results
 
       - name: Upload artifact 'coverage-results'
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         if: success() || failure()
         with:
           name: coverage-results
@@ -143,7 +143,7 @@ jobs:
         run: dotnet pack --configuration Release --output dist --no-restore /p:WarningLevel=0
 
       - name: Upload artifact 'packages'
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: packages
           path: dist
@@ -168,7 +168,7 @@ jobs:
             10.0.x
 
       - name: Download artifact 'packages'
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: packages
 
