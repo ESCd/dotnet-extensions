@@ -1,21 +1,20 @@
-using System.Collections.Immutable;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 
 namespace ESCd.Extensions.Caching.Abstractions;
 
 /// <summary> Represents the key to an entry in an <see cref="IAsyncCache"/>. </summary>
 [ImmutableObject( true )]
-public sealed class CacheKey( params ImmutableArray<string> parts ) : IEquatable<CacheKey>
+public sealed class CacheKey( params IReadOnlyCollection<string> parts ) : IEquatable<CacheKey>
 {
     private const char Delimiter = '|';
 
     /// <summary> The string parts that the key is composed of. </summary>
-    public ImmutableArray<string> Parts { get; } = parts;
+    public IReadOnlyCollection<string> Parts { get; } = parts;
 
     /// <summary> Create a key, combining an existing <paramref name="key"/> with the given <paramref name="parts"/>. </summary>
     /// <param name="key"> The parent/prefix cache. </param>
     /// <param name="parts"> The parts to be combined with <paramref name="key"/>. </param>
-    public CacheKey( CacheKey key, params ImmutableArray<string> parts ) : this( [ .. key.Parts, .. parts ] )
+    public CacheKey( CacheKey key, params IReadOnlyCollection<string> parts ) : this( [ .. key.Parts, .. parts ] )
     {
     }
 
