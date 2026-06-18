@@ -1,4 +1,4 @@
-﻿name: default
+name: default
 
 env:
   DOTNET_NOLOGO: true
@@ -18,7 +18,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v5
@@ -40,7 +40,7 @@ jobs:
     needs: [build]
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v5
@@ -122,7 +122,7 @@ jobs:
     needs: [test]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
@@ -154,7 +154,7 @@ jobs:
 
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           sparse-checkout: global.json
 
