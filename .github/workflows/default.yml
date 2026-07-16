@@ -1,4 +1,4 @@
-﻿name: default
+name: default
 
 env:
   DOTNET_NOLOGO: true
@@ -21,7 +21,7 @@ jobs:
       - uses: actions/checkout@v6
 
       - name: Setup .NET Core
-        uses: actions/setup-dotnet@v5
+        uses: actions/setup-dotnet@v6
         with:
           cache: true
           cache-dependency-path: ./**/packages.lock.json
@@ -43,7 +43,7 @@ jobs:
       - uses: actions/checkout@v6
 
       - name: Setup .NET Core
-        uses: actions/setup-dotnet@v5
+        uses: actions/setup-dotnet@v6
         with:
           cache: true
           cache-dependency-path: ./**/packages.lock.json
@@ -127,7 +127,7 @@ jobs:
           fetch-depth: 0
 
       - name: Setup .NET Core
-        uses: actions/setup-dotnet@v5
+        uses: actions/setup-dotnet@v6
         with:
           cache: true
           cache-dependency-path: ./**/packages.lock.json
@@ -159,7 +159,7 @@ jobs:
           sparse-checkout: global.json
 
       - name: Setup .NET Core
-        uses: actions/setup-dotnet@v5
+        uses: actions/setup-dotnet@v6
         with:
           cache: false
           dotnet-version: |
