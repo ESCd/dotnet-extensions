@@ -20,6 +20,13 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
+      - name: Setup .NET Core (11.0)
+        uses: actions/setup-dotnet@v6
+        with:
+          cache: false
+          dotnet-quality: preview
+          dotnet-version: 11.0.x
+
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v6
         with:
@@ -41,6 +48,13 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v7
+
+      - name: Setup .NET Core (11.0)
+        uses: actions/setup-dotnet@v6
+        with:
+          cache: false
+          dotnet-quality: preview
+          dotnet-version: 11.0.x
 
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v6
@@ -65,6 +79,10 @@ jobs:
 
       - name: Run tests (net10.0)
         run: foreach( $project in Get-ChildItem "ESCd.Extensions.*.Tests.csproj" -Recurse ) { dotnet test "$($project.FullName)" -f net10.0 --no-restore --results-directory TestResults/net10.0 --logger "trx;logFileName=$($project.BaseName).trx" --collect:"XPlat Code Coverage" /p:WarningLevel=0 -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=cobertura DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.DeterministicReport=true }
+        shell: pwsh
+
+      - name: Run tests (net11.0)
+        run: foreach( $project in Get-ChildItem "ESCd.Extensions.*.Tests.csproj" -Recurse ) { dotnet test "$($project.FullName)" -f net11.0 --no-restore --results-directory TestResults/net11.0 --logger "trx;logFileName=$($project.BaseName).trx" --collect:"XPlat Code Coverage" /p:WarningLevel=0 -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=cobertura DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.DeterministicReport=true }
         shell: pwsh
 
       - name: Upload artifact 'test-results'
@@ -126,6 +144,13 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Setup .NET Core (11.0)
+        uses: actions/setup-dotnet@v6
+        with:
+          cache: false
+          dotnet-quality: preview
+          dotnet-version: 11.0.x
+
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v6
         with:
@@ -162,10 +187,8 @@ jobs:
         uses: actions/setup-dotnet@v6
         with:
           cache: false
-          dotnet-version: |
-            8.0.x
-            9.0.x
-            10.0.x
+          dotnet-quality: preview
+          dotnet-version: 11.0.x
 
       - name: Download artifact 'packages'
         uses: actions/download-artifact@v8

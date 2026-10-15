@@ -5,7 +5,7 @@
     <PackageProjectUrl>$(PackageProjectUrl)tree/develop/src/Http</PackageProjectUrl>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <MinVerTagPrefix>http-v</MinVerTagPrefix>
-    <TargetFrameworks>net8.0;net9.0;net10.0;</TargetFrameworks>
+    <TargetFrameworks>net8.0;net9.0;net10.0;net11.0</TargetFrameworks>
   </PropertyGroup>
 
   <ItemGroup>
@@ -35,6 +35,11 @@
   <ItemGroup Condition=" '$(TargetFramework)' == 'net10.0' ">
     <PackageReference Include="Microsoft.Extensions.Http" Version="10.0.13" />
     <PackageReference Include="Microsoft.Extensions.ObjectPool" Version="10.0.13" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net11.0' ">
+    <PackageReference Include="Microsoft.Extensions.Http" Version="11.0.*-*" />
+    <PackageReference Include="Microsoft.Extensions.ObjectPool" Version="11.0.*-*" />
   </ItemGroup>
 
 </Project>
