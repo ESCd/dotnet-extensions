@@ -5,7 +5,7 @@
     <PackageProjectUrl>$(PackageProjectUrl)tree/develop/src/ObjectPool</PackageProjectUrl>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <MinVerTagPrefix>objectpool-v</MinVerTagPrefix>
-    <TargetFrameworks>net9.0;net10.0;net11.0</TargetFrameworks>
+    <TargetFrameworks>net10.0;net11.0</TargetFrameworks>
   </PropertyGroup>
 
   <ItemGroup>
@@ -16,14 +16,6 @@
 
   <ItemGroup>
     <None Include="README.md" Pack="true" PackagePath="\" />
-  </ItemGroup>
-
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net8.0' ">
-    <PackageReference Include="Microsoft.Extensions.ObjectPool" Version="8.0.22" />
-  </ItemGroup>
-
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net9.0' ">
-    <PackageReference Include="Microsoft.Extensions.ObjectPool" Version="9.0.21" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net10.0' ">
