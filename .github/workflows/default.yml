@@ -20,19 +20,12 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
-      - name: Setup .NET Core (11.0)
-        uses: actions/setup-dotnet@v6
-        with:
-          cache: false
-          dotnet-quality: preview
-          dotnet-version: 11.0.x
-
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v6
         with:
           cache: true
           cache-dependency-path: ./**/packages.lock.json
-          dotnet-version: 10.0.x
+          dotnet-version: 11.0.x
 
       - name: Restore dependencies
         run: dotnet restore --locked-mode
@@ -46,19 +39,12 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
-      - name: Setup .NET Core (11.0)
-        uses: actions/setup-dotnet@v6
-        with:
-          cache: false
-          dotnet-quality: preview
-          dotnet-version: 11.0.x
-
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v6
         with:
           cache: true
           cache-dependency-path: ./**/packages.lock.json
-          dotnet-version: 10.0.x
+          dotnet-version: 11.0.x
 
       - name: Restore dependencies
         run: dotnet restore --locked-mode
@@ -130,19 +116,12 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Setup .NET Core (11.0)
-        uses: actions/setup-dotnet@v6
-        with:
-          cache: false
-          dotnet-quality: preview
-          dotnet-version: 11.0.x
-
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v6
         with:
           cache: true
           cache-dependency-path: ./**/packages.lock.json
-          dotnet-version: 10.0.x
+          dotnet-version: 11.0.x
 
       - name: Restore dependencies
         run: dotnet restore --locked-mode
@@ -170,7 +149,6 @@ jobs:
         uses: actions/setup-dotnet@v6
         with:
           cache: false
-          dotnet-quality: preview
           dotnet-version: 11.0.x
 
       - name: Download artifact 'packages'
