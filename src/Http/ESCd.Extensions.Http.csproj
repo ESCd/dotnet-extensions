@@ -5,7 +5,6 @@
     <PackageProjectUrl>$(PackageProjectUrl)tree/develop/src/Http</PackageProjectUrl>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <MinVerTagPrefix>http-v</MinVerTagPrefix>
-    <TargetFrameworks>net10.0;net11.0</TargetFrameworks>
   </PropertyGroup>
 
   <ItemGroup>
@@ -19,17 +18,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Http" Version="$(AspNetCoreVersion)" />
+    <PackageReference Include="Microsoft.Extensions.ObjectPool" Version="$(AspNetCoreVersion)" />
     <PackageReference Include="Microsoft.IO.RecyclableMemoryStream" Version="4.0.1" />
-  </ItemGroup>
-
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net10.0' ">
-    <PackageReference Include="Microsoft.Extensions.Http" Version="10.0.15" />
-    <PackageReference Include="Microsoft.Extensions.ObjectPool" Version="10.0.15" />
-  </ItemGroup>
-
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net11.0' ">
-    <PackageReference Include="Microsoft.Extensions.Http" Version="11.0.0" />
-    <PackageReference Include="Microsoft.Extensions.ObjectPool" Version="11.0.0" />
   </ItemGroup>
 
 </Project>
